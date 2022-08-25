@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:mualim/auth/onboard/onboard_screen.dart';
+import 'package:mualim/auth/onboard_screen.dart';
 import 'package:mualim/constants/app_theme.dart';
 
 void main() {
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: "Metropolis",
-        primarySwatch: Colors.red,
+        primarySwatch: Colors.purple,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(
