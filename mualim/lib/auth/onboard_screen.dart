@@ -55,12 +55,31 @@ class _OnboardScreenState extends State<OnboardScreen> {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          minimumSize: Size(MediaQuery.of(context).size.width * 0.5, 45),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: 5.0,
+          horizontal: 20,
         ),
-        onPressed: () => {Get.offAll(LoginScreen())},
-        child: const Text('Get Started'),
+        child: ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor:
+                MaterialStateProperty.all<Color>(Colors.transparent),
+            foregroundColor: MaterialStateProperty.all<Color>(AppTheme.primary),
+            overlayColor: MaterialStateProperty.all<Color>(
+                AppTheme.primary.withOpacity(0.1)),
+            minimumSize: MaterialStateProperty.all(
+              Size(MediaQuery.of(context).size.width, 45),
+            ),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                side: const BorderSide(color: AppTheme.primary),
+              ),
+            ),
+          ),
+          onPressed: () => {Get.offAll(LoginScreen())},
+          child: const Text('Get Started'),
+        ),
       ),
     );
   }

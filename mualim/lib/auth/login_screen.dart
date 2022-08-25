@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:mualim/auth/registration_screen.dart';
 import 'package:mualim/constants/app_theme.dart';
 import 'package:mualim/helper/helper.dart';
+import 'package:mualim/home/drawer/menu_drawer.dart';
 
 import 'forget_password.dart';
 
@@ -157,7 +158,9 @@ class LoginScreen extends StatelessWidget {
                   ),
                   child: ElevatedButton(
                     onPressed: () {
-                      if (formKey.currentState!.validate()) {}
+                      if (formKey.currentState!.validate()) {
+                        Get.offAll(const MenuDrawer());
+                      }
                     },
                     child: const Text('Sign In'),
                     style: ButtonStyle(
