@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:mualim/constants/app_theme.dart';
+import 'package:mualim/home/search_list.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -40,11 +41,10 @@ class _HomeScreenState extends State<HomeScreen> {
             AssetImage('assets/icons/menu.png'),
             size: 24,
           ),
-          
         ),
       ),
       body: Column(
-        children: const [],
+        children: const [SearchList()],
       ),
     );
   }
