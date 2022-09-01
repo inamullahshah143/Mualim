@@ -6,6 +6,7 @@ import 'package:mualim/constants/app_theme.dart';
 import 'package:mualim/home/home_sab/all_courses.dart';
 import 'package:mualim/home/home_sab/saved_courses.dart';
 import 'package:mualim/home/home_sab/stuyding_courses.dart';
+import 'package:mualim/home/search_list.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -169,8 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
               _selectedIndex = index;
             });
           },
-        ),
-      ),
+        ),),
     );
   }
 }
