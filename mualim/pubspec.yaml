@@ -42,6 +42,8 @@ dependencies:
   flutter_zoom_drawer: ^3.0.3
   dio: ^4.0.6
   flutter_downloader: ^1.8.3
+  google_nav_bar: ^5.0.6
+  line_icons: ^2.0.1
 
 dev_dependencies:
   flutter_test:
