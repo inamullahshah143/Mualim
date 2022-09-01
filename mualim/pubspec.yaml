@@ -42,6 +42,8 @@ dependencies:
   intl_phone_number_input: ^0.7.0+2
   fluttericon: ^2.0.0
   flutter_zoom_drawer: ^3.0.3
+  google_nav_bar: ^5.0.6
+  line_icons: ^2.0.1
 
 dev_dependencies:
   flutter_test:
