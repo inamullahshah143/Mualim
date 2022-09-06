@@ -15,56 +15,53 @@ class AllCourses extends StatefulWidget {
 
 class _AllCoursesState extends State<AllCourses> {
   int progress = 0;
-
-  final ReceivePort _receivePort = ReceivePort();
-
-  static downloadingCallback(id, status, progress) {
-    ///Looking up for a send port
-    SendPort? sendPort = IsolateNameServer.lookupPortByName("downloading");
-
-    ///ssending the data
-    sendPort!.send([id, status, progress]);
+  final ReceivePort _port = ReceivePort();
+  static void downloadCallback(
+      String id, DownloadTaskStatus status, int progress) {
+    //Callback for the Flutter_Downloader
+    final SendPort send =
+        IsolateNameServer.lookupPortByName('downloader_send_port')!;
+    send.send([id, status, progress]);
   }
 
   @override
   void initState() {
-    super.initState();
-
-    ///register a send port for the other isolates
     IsolateNameServer.registerPortWithName(
-        _receivePort.sendPort, "downloading");
+        _port.sendPort, 'downloader_send_port');
 
-    ///Listening for the data is comming other isolataes
-    _receivePort.listen((message) {
+    _port.listen((dynamic data) {
+      String id = data[0];
+      DownloadTaskStatus status = data[1];
       setState(() {
-        progress = message[2];
+        progress = data[2];
+        print(data[1]);
       });
-
-      print(progress);
     });
 
-    FlutterDownloader.registerCallback(downloadingCallback);
+    FlutterDownloader.registerCallback(downloadCallback);
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Text(
+          "$progress",
+          style: const TextStyle(fontSize: 40),
+        ),
         ElevatedButton(
           onPressed: () async {
             final status = await Permission.storage.request();
 
             if (status.isGranted) {
               final externalDir = await getExternalStorageDirectory();
-
               await FlutterDownloader.enqueue(
-                url:
-                    "https://firebasestorage.googleapis.com/v0/b/storage-3cff8.appspot.com/o/2020-05-29%2007-18-34.mp4?alt=media&token=841fffde-2b83-430c-87c3-2d2fd658fd41",
-                savedDir: externalDir!.path,
-                fileName: "download",
-                showNotification: true,
-                openFileFromNotification: true,
-              );
+                  url:
+                      "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4",
+                  savedDir: externalDir!.path,
+                  showNotification: true,
+                  openFileFromNotification: true,
+                  saveInPublicStorage: true);
             } else {
               print("Permission deined");
             }
