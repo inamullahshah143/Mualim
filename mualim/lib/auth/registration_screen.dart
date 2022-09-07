@@ -286,7 +286,6 @@ class SignupScreen extends StatelessWidget {
                   onPressed: () {
                     if (formKey.currentState!.validate()) {}
                   },
-                  child: const Text('Sign Up'),
                   style: ButtonStyle(
                     foregroundColor:
                         MaterialStateProperty.all<Color>(AppTheme.white),
@@ -302,6 +301,7 @@ class SignupScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  child: const Text('Sign Up'),
                 ),
               ),
               Padding(

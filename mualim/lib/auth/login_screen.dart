@@ -162,7 +162,6 @@ class LoginScreen extends StatelessWidget {
                         Get.offAll(const MenuDrawer());
                       }
                     },
-                    child: const Text('Sign In'),
                     style: ButtonStyle(
                       foregroundColor:
                           MaterialStateProperty.all<Color>(AppTheme.white),
@@ -178,6 +177,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    child: const Text('Sign In'),
                   ),
                 ),
                 Padding(
@@ -234,7 +234,9 @@ class LoginScreen extends StatelessWidget {
                     horizontal: 20,
                   ),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.offAll(const MenuDrawer());
+                    },
                     style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all<Color>(Colors.transparent),

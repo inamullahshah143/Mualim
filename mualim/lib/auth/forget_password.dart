@@ -92,7 +92,6 @@ class ForgetPassword extends StatelessWidget {
               ),
               child: ElevatedButton(
                 onPressed: () {},
-                child: const Text('Send'),
                 style: ButtonStyle(
                   foregroundColor:
                       MaterialStateProperty.all<Color>(AppTheme.white),
@@ -108,6 +107,7 @@ class ForgetPassword extends StatelessWidget {
                     ),
                   ),
                 ),
+                child: const Text('Send'),
               ),
             ),
           ],
