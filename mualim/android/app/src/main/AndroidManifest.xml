@@ -9,15 +9,15 @@
         android:label="Mualim"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:requestLegacyExternalStorage="true">
+        android:usesCleartextTraffic="true">
         <provider
             android:name="vn.hunghd.flutterdownloader.DownloadedFileProvider"
             android:authorities="${applicationId}.flutter_downloader.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
-              android:name="android.support.FILE_PROVIDER_PATHS"
-              android:resource="@xml/provider_paths"/>
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
         </provider>
         <provider
             android:name="androidx.startup.InitializationProvider"
@@ -29,10 +29,13 @@
                 android:value="androidx.startup"
                 tools:node="remove" />
         </provider>
+        
+        <!-- declare customized Initializer -->
         <provider
             android:name="vn.hunghd.flutterdownloader.FlutterDownloaderInitializer"
             android:authorities="${applicationId}.flutter-downloader-init"
             android:exported="false">
+            <!-- changes this number to configure the maximum number of concurrent tasks -->
             <meta-data
                 android:name="vn.hunghd.flutterdownloader.MAX_CONCURRENT_TASKS"
                 android:value="5" />

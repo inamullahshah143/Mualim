@@ -159,7 +159,7 @@ class LoginScreen extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        Get.offAll(const MenuDrawer());
+                        Get.offAll(() => const MenuDrawer());
                       }
                     },
                     style: ButtonStyle(
@@ -235,7 +235,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   child: ElevatedButton(
                     onPressed: () {
-                      Get.offAll(const MenuDrawer());
+                      Get.offAll(() => const MenuDrawer());
                     },
                     style: ButtonStyle(
                       backgroundColor:
