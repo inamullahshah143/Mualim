@@ -77,7 +77,9 @@ class _OnboardScreenState extends State<OnboardScreen> {
               ),
             ),
           ),
-          onPressed: () => {Get.offAll(LoginScreen())},
+          onPressed: () {
+            Get.offAll(() => LoginScreen());
+          },
           child: const Text('Get Started'),
         ),
       ),
