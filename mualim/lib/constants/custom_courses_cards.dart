@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../home/home_sab/courses/details_courses.dart';
 
 class CustomCoursesCards extends StatelessWidget {
   final String title;
   final int lessons;
   final String thumbnail;
-  final Function onPressed;
   const CustomCoursesCards({
     Key? key,
     required this.title,
     required this.lessons,
     required this.thumbnail,
-    required this.onPressed,
   }) : super(key: key);
 
   @override
@@ -23,7 +24,13 @@ class CustomCoursesCards extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
         ),
         padding: EdgeInsets.zero,
-        onPressed: () => onPressed,
+        onPressed: () {
+          Get.to(() => DetailedCourse(
+                lessons: lessons,
+                title: title,
+                thumbnail: thumbnail,
+              ));
+        },
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: Row(
