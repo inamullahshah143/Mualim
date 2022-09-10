@@ -5,6 +5,7 @@ import '../home/home_sab/courses/details_courses.dart';
 
 class CustomCoursesCards extends StatelessWidget {
   final String title;
+  final String subtitle;
   final int lessons;
   final String thumbnail;
   const CustomCoursesCards({
@@ -12,6 +13,7 @@ class CustomCoursesCards extends StatelessWidget {
     required this.title,
     required this.lessons,
     required this.thumbnail,
+    required this.subtitle,
   }) : super(key: key);
 
   @override
@@ -28,6 +30,7 @@ class CustomCoursesCards extends StatelessWidget {
           Get.to(() => DetailedCourse(
                 lessons: lessons,
                 title: title,
+                subtitle: subtitle,
                 thumbnail: thumbnail,
               ));
         },
@@ -56,7 +59,7 @@ class CustomCoursesCards extends StatelessWidget {
                       Text(
                         title,
                         overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
+                        maxLines: 1,
                         style: const TextStyle(
                           fontSize: 20,
                           height: 1.25,
@@ -64,6 +67,16 @@ class CustomCoursesCards extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 5),
+                      Text(
+                        subtitle,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          height: 1.25,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                       Text('$lessons Lessons'),
                     ],
                   ),
