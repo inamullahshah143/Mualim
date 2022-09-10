@@ -27,12 +27,14 @@ class CustomCoursesCards extends StatelessWidget {
         ),
         padding: EdgeInsets.zero,
         onPressed: () {
-          Get.to(() => DetailedCourse(
-                lessons: lessons,
-                title: title,
-                subtitle: subtitle,
-                thumbnail: thumbnail,
-              ));
+          Get.to(
+            () => DetailedCourse(
+              lessons: lessons,
+              title: title,
+              subtitle: subtitle,
+              thumbnail: thumbnail,
+            ),
+          );
         },
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
@@ -62,7 +64,6 @@ class CustomCoursesCards extends StatelessWidget {
                         maxLines: 1,
                         style: const TextStyle(
                           fontSize: 20,
-                          height: 1.25,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -74,10 +75,16 @@ class CustomCoursesCards extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 14,
                           height: 1.25,
-                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      Text('$lessons Lessons'),
+                      Text(
+                        '$lessons Lessons',
+                        style: const TextStyle(
+                          fontSize: 10,
+                          height: 1.5,
+                          fontWeight: FontWeight.w200,
+                        ),
+                      ),
                     ],
                   ),
                 ),

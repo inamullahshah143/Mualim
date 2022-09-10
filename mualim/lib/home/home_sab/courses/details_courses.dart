@@ -20,80 +20,64 @@ class DetailedCourse extends StatefulWidget {
 }
 
 class _DetailedCourseState extends State<DetailedCourse> {
-  TabController? tabController;
-  int selectedTabbar = 0;
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: DraggableHome(
-        appBarColor: AppTheme.appThemeColor,
-        title: Text(widget.title),
-        headerWidget: headerWidget(context),
-        body: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Material(
-              color: AppTheme.appThemeColor,
-              elevation: 1.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(
-                  widget.subtitle,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: TabBar(
-              controller: tabController,
-              labelColor: AppTheme.white,
-              unselectedLabelColor: AppTheme.fonts,
-              indicatorSize: TabBarIndicatorSize.tab,
-              indicator: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: AppTheme.appThemeColor,
-              ),
-              onTap: (index) {
-                setState(() {
-                  selectedTabbar = index;
-                });
-              },
-              tabs: const [
-                Tab(text: 'Lessons'),
-                Tab(text: 'Discussions'),
-              ],
-            ),
-          ),
-          IntrinsicHeight(
-            child: Column(
-              children: [
-                selectedTabbar == 0 ? listView() : messagesList(),
-              ],
-            ),
-          ),
-        ],
-        fullyStretchable: false,
-        backgroundColor: Colors.white,
-      ),
+    return DraggableHome(
+      appBarColor: AppTheme.appThemeColor,
+      title: Text(widget.title),
+      headerWidget: headerWidget(context),
+      body: [
+        listView(),
+        //  messagesList(),
+      ],
+      fullyStretchable: false,
+      backgroundColor: Colors.white,
     );
   }
 
   Widget headerWidget(BuildContext context) {
     return Container(
+      alignment: Alignment.bottomCenter,
       decoration: BoxDecoration(
         image: DecorationImage(
           image: NetworkImage(widget.thumbnail),
           fit: BoxFit.cover,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 15.0),
+        child: Material(
+          color: AppTheme.appThemeColor,
+          elevation: 1.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  widget.title,
+                  style: const TextStyle(
+                    fontSize: 28,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  widget.subtitle,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -103,21 +87,30 @@ class _DetailedCourseState extends State<DetailedCourse> {
     return ListView.builder(
       padding: const EdgeInsets.only(top: 0),
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: 20,
+      itemCount: widget.lessons,
       shrinkWrap: true,
-      itemBuilder: (context, index) => Card(
-        color: Colors.white70,
-        child: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: AppTheme.appThemeColor,
-              child: Text("${index + 1}"),
-            ),
-            title: const Text("Lesson Title"),
-            subtitle: const Text("Details"),
-            trailing: IconButton(
-              icon: const Icon(Icons.play_arrow_rounded),
-              onPressed: () {},
-            )),
+      itemBuilder: (context, index) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 2.5),
+        child: MaterialButton(
+          onPressed: () {},
+          elevation: 1.0,
+          color: Colors.white70,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: ListTile(
+              enabled: false,
+              leading: CircleAvatar(
+                backgroundColor: AppTheme.appThemeColor,
+                child: Text("${index + 1}"),
+              ),
+              title: const Text("Lesson Title"),
+              subtitle: const Text("Details"),
+              trailing: IconButton(
+                icon: const Icon(Icons.play_arrow_rounded),
+                onPressed: () {},
+              )),
+        ),
       ),
     );
   }
