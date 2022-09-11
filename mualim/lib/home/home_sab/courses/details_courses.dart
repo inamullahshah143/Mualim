@@ -1,6 +1,9 @@
 import 'package:draggable_home/draggable_home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:mualim/constants/app_theme.dart';
+import 'package:mualim/home/home_sab/courses/lesson_screen.dart';
 
 class DetailedCourse extends StatefulWidget {
   final String title;
@@ -22,14 +25,23 @@ class DetailedCourse extends StatefulWidget {
 class _DetailedCourseState extends State<DetailedCourse> {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarBrightness: Brightness.dark,
+      ),
+    );
     return DraggableHome(
+      alwaysShowLeadingAndAction: true,
+      headerExpandedHeight: 0.4,
       appBarColor: AppTheme.appThemeColor,
       title: Text(widget.title),
       headerWidget: headerWidget(context),
       body: [
         listView(),
-        //  messagesList(),
+        // messagesList(),
       ],
+      curvedBodyRadius: 25,
       fullyStretchable: false,
       backgroundColor: Colors.white,
     );
@@ -75,6 +87,32 @@ class _DetailedCourseState extends State<DetailedCourse> {
                     color: Colors.white,
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10.0,
+                    horizontal: 20,
+                  ),
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.white),
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(AppTheme.primary),
+                      overlayColor: MaterialStateProperty.all<Color>(
+                          AppTheme.white.withOpacity(0.1)),
+                      minimumSize: MaterialStateProperty.all(
+                        Size(MediaQuery.of(context).size.width, 45),
+                      ),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                    ),
+                    onPressed: () {},
+                    child: const Text('Get Started'),
+                  ),
+                ),
               ],
             ),
           ),
@@ -92,7 +130,9 @@ class _DetailedCourseState extends State<DetailedCourse> {
       itemBuilder: (context, index) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 2.5),
         child: MaterialButton(
-          onPressed: () {},
+          onPressed: () {
+            Get.to(const LessonScreen());
+          },
           elevation: 1.0,
           color: Colors.white70,
           shape: RoundedRectangleBorder(
@@ -100,6 +140,7 @@ class _DetailedCourseState extends State<DetailedCourse> {
           ),
           child: ListTile(
               enabled: false,
+              contentPadding: EdgeInsets.zero,
               leading: CircleAvatar(
                 backgroundColor: AppTheme.appThemeColor,
                 child: Text("${index + 1}"),
@@ -121,25 +162,34 @@ class _DetailedCourseState extends State<DetailedCourse> {
       physics: const NeverScrollableScrollPhysics(),
       itemCount: 2,
       shrinkWrap: true,
-      itemBuilder: (context, index) => Card(
-        color: Colors.white70,
-        child: ListTile(
-            dense: true,
-            leading: const CircleAvatar(
-              backgroundColor: AppTheme.appThemeColor,
-              child: Icon(Icons.person_outline),
-            ),
-            title: const Text("Username"),
-            subtitle: const Text("Message...."),
-            trailing: IconButton(
-              icon: const Text(
-                '01:00 PM',
-                style: TextStyle(
-                  fontSize: 8,
-                ),
+      itemBuilder: (context, index) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 2.5),
+        child: MaterialButton(
+          onPressed: () {},
+          elevation: 0.0,
+          color: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: ListTile(
+              contentPadding: EdgeInsets.zero,
+              dense: true,
+              leading: const CircleAvatar(
+                backgroundColor: AppTheme.appThemeColor,
+                child: Icon(Icons.person_outline),
               ),
-              onPressed: () {},
-            )),
+              title: const Text("Username"),
+              subtitle: const Text("Message...."),
+              trailing: IconButton(
+                icon: const Text(
+                  '01:00 PM',
+                  style: TextStyle(
+                    fontSize: 8,
+                  ),
+                ),
+                onPressed: () {},
+              )),
+        ),
       ),
     );
   }

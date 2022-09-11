@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: "Metropolis",
+        visualDensity: VisualDensity.adaptivePlatformDensity,
         primarySwatch: Colors.purple,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
