@@ -4,7 +4,8 @@ import 'package:better_player/better_player.dart';
 import '../../../constants/app_theme.dart';
 
 class LessonScreen extends StatefulWidget {
-  const LessonScreen({Key? key}) : super(key: key);
+  final String title;
+  const LessonScreen({Key? key, required this.title}) : super(key: key);
 
   @override
   State<LessonScreen> createState() => _LessonScreenState();
@@ -17,15 +18,29 @@ class _LessonScreenState extends State<LessonScreen> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        backgroundColor: AppTheme.placeholder,
+        appBar: AppBar(
+          backgroundColor: AppTheme.placeholder,
+          elevation: 0.0,
+          title: Text(widget.title),
+          foregroundColor: AppTheme.primary,
+        ),
         body: Column(
           children: [
-            AspectRatio(
-              aspectRatio: 16 / 9,
-              child: BetterPlayerPlaylist(
-                betterPlayerConfiguration: const BetterPlayerConfiguration(),
-                betterPlayerPlaylistConfiguration:
-                    const BetterPlayerPlaylistConfiguration(),
-                betterPlayerDataSourceList: createDataSet(),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: BetterPlayerPlaylist(
+                    betterPlayerConfiguration:
+                        const BetterPlayerConfiguration(),
+                    betterPlayerPlaylistConfiguration:
+                        const BetterPlayerPlaylistConfiguration(),
+                    betterPlayerDataSourceList: createDataSet(),
+                  ),
+                ),
               ),
             ),
             Container(

@@ -1,6 +1,5 @@
 import 'package:draggable_home/draggable_home.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mualim/constants/app_theme.dart';
 import 'package:mualim/home/home_sab/courses/lesson_screen.dart';
@@ -25,13 +24,8 @@ class DetailedCourse extends StatefulWidget {
 class _DetailedCourseState extends State<DetailedCourse> {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarBrightness: Brightness.dark,
-      ),
-    );
     return DraggableHome(
+      backgroundColor: AppTheme.placeholder,
       alwaysShowLeadingAndAction: true,
       headerExpandedHeight: 0.4,
       appBarColor: AppTheme.appThemeColor,
@@ -43,7 +37,6 @@ class _DetailedCourseState extends State<DetailedCourse> {
       ],
       curvedBodyRadius: 25,
       fullyStretchable: false,
-      backgroundColor: Colors.white,
     );
   }
 
@@ -131,10 +124,12 @@ class _DetailedCourseState extends State<DetailedCourse> {
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 2.5),
         child: MaterialButton(
           onPressed: () {
-            Get.to(const LessonScreen());
+            Get.to(LessonScreen(
+              title: widget.title,
+            ));
           },
           elevation: 1.0,
-          color: Colors.white70,
+          color: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
