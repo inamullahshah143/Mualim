@@ -71,6 +71,33 @@ class _LessonScreenState extends State<LessonScreen> {
             ),
           ],
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+          ),
+          child: ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateProperty.all<Color>(Colors.transparent),
+              foregroundColor:
+                  MaterialStateProperty.all<Color>(AppTheme.primary),
+              overlayColor: MaterialStateProperty.all<Color>(
+                  AppTheme.primary.withOpacity(0.1)),
+              minimumSize: MaterialStateProperty.all(
+                Size(MediaQuery.of(context).size.width, 45),
+              ),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  side: const BorderSide(color: AppTheme.primary),
+                ),
+              ),
+            ),
+            onPressed: () {},
+            child: const Text('Start Quiz'),
+          ),
+        ),
       ),
     );
   }

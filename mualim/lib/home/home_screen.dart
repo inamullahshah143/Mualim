@@ -121,21 +121,21 @@ class _HomeScreenState extends State<HomeScreen> {
         child: GNav(
           tabActiveBorder: const Border(
             bottom: BorderSide(
-              color: AppTheme.appThemeColor,
+              color: AppTheme.primary,
             ),
             top: BorderSide(
-              color: AppTheme.appThemeColor,
+              color: AppTheme.primary,
             ),
             left: BorderSide(
-              color: AppTheme.appThemeColor,
+              color: AppTheme.primary,
             ),
             right: BorderSide(
-              color: AppTheme.appThemeColor,
+              color: AppTheme.primary,
             ),
           ),
           tabBorderRadius: 15,
           gap: 8,
-          activeColor: AppTheme.appThemeColor,
+          activeColor: AppTheme.primary,
           iconSize: 24,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           duration: const Duration(milliseconds: 400),
