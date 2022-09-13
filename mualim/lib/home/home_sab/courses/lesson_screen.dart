@@ -13,6 +13,13 @@ class LessonScreen extends StatefulWidget {
 
 class _LessonScreenState extends State<LessonScreen> {
   TabController? tabController;
+  void handleClick(String value) {
+    switch (value) {
+      case 'Download':
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -24,6 +31,19 @@ class _LessonScreenState extends State<LessonScreen> {
           elevation: 0.0,
           title: Text(widget.title),
           foregroundColor: AppTheme.primary,
+          actions: [
+            PopupMenuButton<String>(
+              onSelected: handleClick,
+              itemBuilder: (BuildContext context) {
+                return {'Download'}.map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                }).toList();
+              },
+            ),
+          ],
         ),
         body: Column(
           children: [
