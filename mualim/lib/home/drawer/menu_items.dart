@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
-import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:mualim/constants/app_theme.dart';
 
 class MenuItems extends StatelessWidget {
@@ -62,17 +61,6 @@ class MenuItems extends StatelessWidget {
                   size: 20,
                 ),
                 title: const Text('Edit Profile'),
-              ),
-              ListTile(
-                onTap: () {
-                  ZoomDrawer.of(context)!.close();
-                },
-                leading: const Icon(
-                  FontAwesome.chat_empty,
-                  color: AppTheme.fonts,
-                  size: 20,
-                ),
-                title: const Text('Messages'),
               ),
               ListTile(
                 onTap: () {

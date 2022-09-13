@@ -14,7 +14,7 @@ class _AllCoursesState extends State<AllCourses> {
     return Column(
       children: const [
         CustomCoursesCards(
-          lessons: 20,
+          lessons: 5,
           thumbnail:
               'https://miro.medium.com/max/1400/1*L76A5gL6176UbMgn7q4Ybg.jpeg',
           title: 'Mathematics',
@@ -22,7 +22,7 @@ class _AllCoursesState extends State<AllCourses> {
               'Mathematics is an area of knowledge that includes such topics as numbers (arithmetic and number theory), formulas and related structures (algebra),',
         ),
         CustomCoursesCards(
-          lessons: 101,
+          lessons: 10,
           thumbnail:
               'https://i0.wp.com/academiamag.com/wp-content/uploads/2022/07/Physics_0.jpg',
           title: 'Physics',

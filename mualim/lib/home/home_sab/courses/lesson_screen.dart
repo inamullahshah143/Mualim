@@ -74,13 +74,11 @@ class _LessonScreenState extends State<LessonScreen> {
             Expanded(
               child: TabBarView(
                 controller: tabController,
-                children: const [
-                  Center(
+                children: [
+                  const Center(
                     child: Text('Attachments'),
                   ),
-                  Center(
-                    child: Text('Discussion'),
-                  ),
+                  messagesList(),
                 ],
               ),
             ),
@@ -111,6 +109,45 @@ class _LessonScreenState extends State<LessonScreen> {
             ),
             onPressed: () {},
             child: const Text('Start Quiz'),
+          ),
+        ),
+      ),
+    );
+  }
+
+  ListView messagesList() {
+    return ListView.builder(
+      padding: const EdgeInsets.only(top: 0),
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: 2,
+      shrinkWrap: true,
+      itemBuilder: (context, index) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 2.5),
+        child: MaterialButton(
+          onPressed: () {},
+          elevation: 0.0,
+          color: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: ListTile(
+            contentPadding: EdgeInsets.zero,
+            dense: true,
+            leading: const CircleAvatar(
+              backgroundColor: AppTheme.appThemeColor,
+              child: Icon(Icons.person_outline),
+            ),
+            title: const Text("Username"),
+            subtitle: const Text("Message...."),
+            trailing: IconButton(
+              icon: const Text(
+                '01:00 PM',
+                style: TextStyle(
+                  fontSize: 7,
+                ),
+              ),
+              onPressed: () {},
+            ),
           ),
         ),
       ),
