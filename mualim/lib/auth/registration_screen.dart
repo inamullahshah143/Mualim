@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:mualim/auth/login_screen.dart';
 import 'package:mualim/constants/app_theme.dart';
 import 'package:mualim/controllers/registration_controller.dart';
 import 'package:mualim/helper/helper.dart';
@@ -9,11 +8,16 @@ import 'package:mualim/model/registration_model.dart';
 
 final registrationController = Get.put(RegistrationController());
 
-class SignupScreen extends StatelessWidget {
-  SignupScreen({Key? key}) : super(key: key);
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({Key? key}) : super(key: key);
 
+  @override
+  State<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
   final isVisible = true.obs;
-
+  RegistrationModel? registrationModel;
   final String initialCountry = 'PK';
   final PhoneNumber number = PhoneNumber(isoCode: 'PK', dialCode: '0');
   final isValidNo = true.obs;
@@ -23,6 +27,7 @@ class SignupScreen extends StatelessWidget {
   final TextEditingController phoneNo = TextEditingController();
   final TextEditingController password = TextEditingController();
   final TextEditingController confirmPassword = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,7 +103,7 @@ class SignupScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide.none,
                           ),
-                          hintText: 'Username',
+                          hintText: 'Teacher Name',
                           hintStyle: TextStyle(
                             color: AppTheme.fonts.withOpacity(0.5),
                             fontSize: 14,
@@ -106,6 +111,62 @@ class SignupScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 5.0,
+                        horizontal: 20,
+                      ),
+                      child: TextFormField(
+                        controller: email,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) => Helper.validateEmail(value),
+                        decoration: InputDecoration(
+                          isDense: true,
+                          filled: true,
+                          fillColor: AppTheme.secondary.withOpacity(0.075),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
+                          ),
+                          hintText: 'Organization',
+                          hintStyle: TextStyle(
+                            color: AppTheme.fonts.withOpacity(0.5),
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 5.0,
+                        horizontal: 20,
+                      ),
+                      child: TextFormField(
+                        controller: email,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) => Helper.validateEmail(value),
+                        decoration: InputDecoration(
+                          isDense: true,
+                          filled: true,
+                          fillColor: AppTheme.secondary.withOpacity(0.075),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
+                          ),
+                          hintText: 'Designation',
+                          hintStyle: TextStyle(
+                            color: AppTheme.fonts.withOpacity(0.5),
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 5.0,
+                        horizontal: 20,
+                      ),
+                      child:),
+                    
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         vertical: 5.0,
@@ -327,23 +388,23 @@ class SignupScreen extends StatelessWidget {
               Align(
                 alignment: Alignment.center,
                 child: MaterialButton(
-                  onPressed: () {
-                    registrationController
-                        .registrationProcess(RegistrationModel(
-                      name: "Inamullah Shah",
-                      email: "inam.workspae@gmail.com",
-                      password: "shahgee143",
-                      gender: "male",
-                      organization: "YC Solution",
-                      designation: "Flutter Developer",
-                      qualification: "BS (SE)",
-                      experience: 1,
-                      cnic: "37406429369",
-                      phone: "0310151548",
-                      subjectId: 1,
-                    ))
-                        .then((value) {
-                      print(value);
+                  onPressed: () async {
+                    Map<String, dynamic> data = {
+                      "name": "Inamullah Shah",
+                      "email": "inam.worspa@gmail.com",
+                      "password": "shahgee143",
+                      "gender": "male",
+                      "organization": "YC Solution",
+                      "designation": "Flutter Developer",
+                      "qualification": "BS (SE)",
+                      "experience": "1",
+                      "cnic": "3740642939",
+                      "phone": "03105158",
+                      "subject_id": "1",
+                    };
+                    await registrationController
+                        .registrationProcess(data)
+                        .then((response) {
                     });
                   },
                   child: const Text(

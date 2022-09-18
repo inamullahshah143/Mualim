@@ -6,24 +6,27 @@ import 'package:mualim/model/registration_model.dart';
 import 'package:mualim/utils/api_utils.dart';
 
 class RegistrationController extends GetxController {
-  Future<RegistrationModel> registrationProcess(RegistrationModel post) async {
+  Future<RegistrationModel?> registrationProcess(
+      Map<String, dynamic> data) async {
+    print(data);
     try {
       final response = await Dio().post(
         '${ApiUtils.base_url}/Register',
         options: Options(
           headers: {"content-Type": "application/json"},
         ),
-        data: registrationModelToJson(post),
+        data: data,
       );
-      print(response.data);
-      return registrationModelFromJson(jsonEncode(response.data));
-    } on DioError catch (e) {
-      if (e.response!.statusCode == 404) {
-        print(e.response!.statusCode);
+      if (response.statusCode == 201) {
+        print(response.data);
+        return registrationModelFromJson(jsonEncode(response.data));
       } else {
-        print(e.message);
+        return null;
       }
-      return registrationModelFromJson(e.message);
+    } on DioError catch (e) {
+      print(e.response);
+
+      return null;
     }
   }
 }

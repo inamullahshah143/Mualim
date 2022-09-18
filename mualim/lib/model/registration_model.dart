@@ -12,9 +12,36 @@ String registrationModelToJson(RegistrationModel data) =>
 
 class RegistrationModel {
   RegistrationModel({
+    required this.status,
+    required this.success,
+    required this.data,
+    required this.token,
+  });
+
+  int status;
+  String success;
+  Data data;
+  String token;
+
+  factory RegistrationModel.fromJson(Map<String, dynamic> json) =>
+      RegistrationModel(
+        status: json["status"],
+        success: json["success"],
+        data: Data.fromJson(json["data"]),
+        token: json["token"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "status": status,
+        "success": success,
+        "data": data.toJson(),
+        "token": token,
+      };
+}
+
+class Data {
+  Data({
     required this.name,
-    required this.email,
-    required this.password,
     required this.gender,
     required this.organization,
     required this.designation,
@@ -22,26 +49,29 @@ class RegistrationModel {
     required this.experience,
     required this.cnic,
     required this.phone,
+    required this.email,
     required this.subjectId,
+    required this.updatedAt,
+    required this.createdAt,
+    required this.id,
   });
 
   String name;
-  String email;
-  String password;
   String gender;
   String organization;
   String designation;
   String qualification;
-  int experience;
+  String experience;
   String cnic;
   String phone;
-  int subjectId;
+  String email;
+  String subjectId;
+  DateTime updatedAt;
+  DateTime createdAt;
+  int id;
 
-  factory RegistrationModel.fromJson(Map<String, dynamic> json) =>
-      RegistrationModel(
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
         name: json["name"],
-        email: json["email"],
-        password: json["password"],
         gender: json["gender"],
         organization: json["organization"],
         designation: json["designation"],
@@ -49,13 +79,15 @@ class RegistrationModel {
         experience: json["experience"],
         cnic: json["cnic"],
         phone: json["phone"],
+        email: json["email"],
         subjectId: json["subject_id"],
+        updatedAt: DateTime.parse(json["updated_at"]),
+        createdAt: DateTime.parse(json["created_at"]),
+        id: json["id"],
       );
 
   Map<String, dynamic> toJson() => {
         "name": name,
-        "email": email,
-        "password": password,
         "gender": gender,
         "organization": organization,
         "designation": designation,
@@ -63,6 +95,10 @@ class RegistrationModel {
         "experience": experience,
         "cnic": cnic,
         "phone": phone,
+        "email": email,
         "subject_id": subjectId,
+        "updated_at": updatedAt.toIso8601String(),
+        "created_at": createdAt.toIso8601String(),
+        "id": id,
       };
 }
