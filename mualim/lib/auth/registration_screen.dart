@@ -3,7 +3,11 @@ import 'package:get/get.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:mualim/auth/login_screen.dart';
 import 'package:mualim/constants/app_theme.dart';
+import 'package:mualim/controllers/registration_controller.dart';
 import 'package:mualim/helper/helper.dart';
+import 'package:mualim/model/registration_model.dart';
+
+final registrationController = Get.put(RegistrationController());
 
 class SignupScreen extends StatelessWidget {
   SignupScreen({Key? key}) : super(key: key);
@@ -324,7 +328,23 @@ class SignupScreen extends StatelessWidget {
                 alignment: Alignment.center,
                 child: MaterialButton(
                   onPressed: () {
-                    Get.offAll(LoginScreen());
+                    registrationController
+                        .registrationProcess(RegistrationModel(
+                      name: "Inamullah Shah",
+                      email: "inam.workspae@gmail.com",
+                      password: "shahgee143",
+                      gender: "male",
+                      organization: "YC Solution",
+                      designation: "Flutter Developer",
+                      qualification: "BS (SE)",
+                      experience: 1,
+                      cnic: "37406429369",
+                      phone: "0310151548",
+                      subjectId: 1,
+                    ))
+                        .then((value) {
+                      print(value);
+                    });
                   },
                   child: const Text(
                     'Sign In',
