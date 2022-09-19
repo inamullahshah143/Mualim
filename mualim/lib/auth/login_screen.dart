@@ -200,7 +200,7 @@ class LoginScreen extends StatelessWidget {
                   alignment: Alignment.center,
                   child: MaterialButton(
                     onPressed: () {
-                      Get.to(SignupScreen());
+                      Get.to(const SignupScreen());
                     },
                     child: const Text(
                       'Sign Up',

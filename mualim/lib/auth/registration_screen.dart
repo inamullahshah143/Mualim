@@ -19,11 +19,14 @@ class _SignupScreenState extends State<SignupScreen> {
   final isVisible = true.obs;
   RegistrationModel? registrationModel;
   final String initialCountry = 'PK';
+  final gender = ''.obs;
   final PhoneNumber number = PhoneNumber(isoCode: 'PK', dialCode: '0');
   final isValidNo = true.obs;
   final formKey = GlobalKey<FormState>();
   final TextEditingController fullName = TextEditingController();
   final TextEditingController email = TextEditingController();
+  final TextEditingController organization = TextEditingController();
+  final TextEditingController designation = TextEditingController();
   final TextEditingController phoneNo = TextEditingController();
   final TextEditingController password = TextEditingController();
   final TextEditingController confirmPassword = TextEditingController();
@@ -117,7 +120,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         horizontal: 20,
                       ),
                       child: TextFormField(
-                        controller: email,
+                        controller: organization,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value) => Helper.validateEmail(value),
                         decoration: InputDecoration(
@@ -142,7 +145,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         horizontal: 20,
                       ),
                       child: TextFormField(
-                        controller: email,
+                        controller: designation,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value) => Helper.validateEmail(value),
                         decoration: InputDecoration(
@@ -160,13 +163,48 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                         ),
                       ),
-                    ),Padding(
+                    ),
+                    Padding(
                       padding: const EdgeInsets.symmetric(
                         vertical: 5.0,
                         horizontal: 20,
                       ),
-                      child:),
-                    
+                      child: DropdownButtonFormField(
+                        decoration: InputDecoration(
+                          isDense: true,
+                          filled: true,
+                          isCollapsed: true,
+                          fillColor: AppTheme.secondary.withOpacity(0.075),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: const EdgeInsets.all(12.5),
+                          hintText: 'Gender',
+                          hintStyle: TextStyle(
+                            color: AppTheme.fonts.withOpacity(0.5),
+                            fontSize: 14,
+                          ),
+                        ),
+                        items: const [
+                          DropdownMenuItem(
+                            value: 'male',
+                            child: Text('Male'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'female',
+                            child: Text('Female'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'other',
+                            child: Text('Other'),
+                          ),
+                        ],
+                        onChanged: (String? value) {
+                          gender.value = value!;
+                        },
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         vertical: 5.0,
@@ -400,12 +438,10 @@ class _SignupScreenState extends State<SignupScreen> {
                       "experience": "1",
                       "cnic": "3740642939",
                       "phone": "03105158",
-                      "subject_id": "1",
                     };
                     await registrationController
                         .registrationProcess(data)
-                        .then((response) {
-                    });
+                        .then((response) {});
                   },
                   child: const Text(
                     'Sign In',
