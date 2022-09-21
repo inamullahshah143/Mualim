@@ -11,7 +11,7 @@ class LoginController extends GetxController {
     print(data);
     try {
       final response = await Dio().post(
-        '${ApiUtils.base_url}/login',
+        '${ApiUtils.baseUrl}/login',
         options: Options(
           headers: {"content-Type": "application/json"},
         ),

@@ -11,7 +11,7 @@ class RegistrationController extends GetxController {
     print(data);
     try {
       final response = await Dio().post(
-        '${ApiUtils.base_url}/Register',
+        '${ApiUtils.baseUrl}/Register',
         options: Options(
           headers: {"content-Type": "application/json"},
         ),

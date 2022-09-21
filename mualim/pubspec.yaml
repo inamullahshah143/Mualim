@@ -43,6 +43,7 @@ dependencies:
   line_icons: ^2.0.1
   draggable_home: ^1.0.3
   better_player: ^0.0.83
+  sharedpreference: ^0.0.1
 
 dev_dependencies:
   flutter_test:

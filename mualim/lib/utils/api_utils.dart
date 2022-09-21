@@ -1,3 +1,4 @@
 class ApiUtils {
-  static String base_url = 'https://app.muallim.academy/public/api';
+  static String baseUrl = 'https://app.muallim.academy/public/api';
+  static String storageUrl = 'https://app.muallim.academy/public/';
 }

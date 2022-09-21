@@ -4,12 +4,14 @@ import 'package:get/get.dart';
 import '../home/home_sab/courses/details_courses.dart';
 
 class CustomCoursesCards extends StatelessWidget {
+  final int subjectId;
   final String title;
   final String subtitle;
   final int lessons;
   final String thumbnail;
   const CustomCoursesCards({
     Key? key,
+    required this.subjectId,
     required this.title,
     required this.lessons,
     required this.thumbnail,
@@ -29,6 +31,7 @@ class CustomCoursesCards extends StatelessWidget {
         onPressed: () {
           Get.to(
             () => DetailedCourse(
+              subjectId: subjectId,
               lessons: lessons,
               title: title,
               subtitle: subtitle,
