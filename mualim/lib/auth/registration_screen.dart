@@ -28,6 +28,9 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController organization = TextEditingController();
   final TextEditingController designation = TextEditingController();
   final TextEditingController phoneNo = TextEditingController();
+  final TextEditingController qualification = TextEditingController();
+  final TextEditingController experience = TextEditingController();
+  final TextEditingController cnic = TextEditingController();
   final TextEditingController password = TextEditingController();
   final TextEditingController confirmPassword = TextEditingController();
 
@@ -92,6 +95,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       child: TextFormField(
                         controller: fullName,
+                        keyboardType: TextInputType.name,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'please enter your full name';
@@ -121,8 +125,15 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       child: TextFormField(
                         controller: organization,
+                        keyboardType: TextInputType.text,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (value) => Helper.validateEmail(value),
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return 'please enter the organization';
+                          } else {
+                            return null;
+                          }
+                        },
                         decoration: InputDecoration(
                           isDense: true,
                           filled: true,
@@ -145,9 +156,16 @@ class _SignupScreenState extends State<SignupScreen> {
                         horizontal: 20,
                       ),
                       child: TextFormField(
-                        controller: designation,
+                        keyboardType: TextInputType.text,
+                        controller: qualification,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (value) => Helper.validateEmail(value),
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return 'please enter the qualification';
+                          } else {
+                            return null;
+                          }
+                        },
                         decoration: InputDecoration(
                           isDense: true,
                           filled: true,
@@ -156,7 +174,71 @@ class _SignupScreenState extends State<SignupScreen> {
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide.none,
                           ),
-                          hintText: 'Designation',
+                          hintText: 'Qualification',
+                          hintStyle: TextStyle(
+                            color: AppTheme.fonts.withOpacity(0.5),
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 5.0,
+                        horizontal: 20,
+                      ),
+                      child: TextFormField(
+                        controller: experience,
+                        keyboardType: TextInputType.number,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return 'please enter the experience';
+                          } else {
+                            return null;
+                          }
+                        },
+                        decoration: InputDecoration(
+                          isDense: true,
+                          filled: true,
+                          fillColor: AppTheme.secondary.withOpacity(0.075),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
+                          ),
+                          hintText: 'Experience',
+                          hintStyle: TextStyle(
+                            color: AppTheme.fonts.withOpacity(0.5),
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 5.0,
+                        horizontal: 20,
+                      ),
+                      child: TextFormField(
+                        controller: cnic,
+                        keyboardType: TextInputType.number,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return 'please enter the cnic';
+                          } else {
+                            return null;
+                          }
+                        },
+                        decoration: InputDecoration(
+                          isDense: true,
+                          filled: true,
+                          fillColor: AppTheme.secondary.withOpacity(0.075),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
+                          ),
+                          hintText: 'CNIC',
                           hintStyle: TextStyle(
                             color: AppTheme.fonts.withOpacity(0.5),
                             fontSize: 14,
@@ -170,6 +252,13 @@ class _SignupScreenState extends State<SignupScreen> {
                         horizontal: 20,
                       ),
                       child: DropdownButtonFormField(
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return 'please select the gender';
+                          } else {
+                            return null;
+                          }
+                        },
                         decoration: InputDecoration(
                           isDense: true,
                           filled: true,
@@ -212,6 +301,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       child: TextFormField(
                         controller: email,
+                        keyboardType: TextInputType.emailAddress,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value) => Helper.validateEmail(value),
                         decoration: InputDecoration(
@@ -386,8 +476,33 @@ class _SignupScreenState extends State<SignupScreen> {
                   horizontal: 20,
                 ),
                 child: ElevatedButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {}
+                  onPressed: () async {
+                    if (formKey.currentState!.validate()) {
+                      Map<String, dynamic> data = {
+                        "name": fullName.text,
+                        "email": email.text,
+                        "password": confirmPassword.text,
+                        "gender": gender.value,
+                        "organization": organization.text,
+                        "designation": designation.text,
+                        "qualification": qualification.text,
+                        "experience": experience.text,
+                        "cnic": cnic.text,
+                        "phone": number.dialCode.toString() +
+                            phoneNo.text.toString(),
+                      };
+                      await registrationController
+                          .registrationProcess(data)
+                          .then((response) {
+                        if (response!.status == 201) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("User Register Successfully"),
+                            ),
+                          );
+                        }
+                      });
+                    }
                   },
                   style: ButtonStyle(
                     foregroundColor:
@@ -426,24 +541,7 @@ class _SignupScreenState extends State<SignupScreen> {
               Align(
                 alignment: Alignment.center,
                 child: MaterialButton(
-                  onPressed: () async {
-                    Map<String, dynamic> data = {
-                      "name": "Inamullah Shah",
-                      "email": "inam.work@gmail.com",
-                      "password": "Shahgee@143",
-                      "gender": "male",
-                      "organization": "YC Solution",
-                      "designation": "Flutter Developer",
-                      "qualification": "BS (SE)",
-                      "experience": "1",
-                      "cnic": "3740642933669",
-                      "phone": "031015154",
-                      "subject_id": "1",
-                    };
-                    await registrationController
-                        .registrationProcess(data)
-                        .then((response) {});
-                  },
+                  onPressed: () async {},
                   child: const Text(
                     'Sign In',
                     style: TextStyle(

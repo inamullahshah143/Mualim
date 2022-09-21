@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_file_view/flutter_file_view.dart';
+import 'package:get/get.dart';
 
 import 'local_file_viewer.dart';
 
-///
-/// @Describe: 网络链接视图
-///
-/// @Author: LiWeNHuI
-/// @Date: 2021/9/29
-///
 class NetworkFileViewerPage extends StatefulWidget {
   final String downloadUrl;
   final String downloadPath;
@@ -21,7 +16,7 @@ class NetworkFileViewerPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _NetworkFileViewerPageState createState() => _NetworkFileViewerPageState();
+  State<NetworkFileViewerPage> createState() => _NetworkFileViewerPageState();
 }
 
 class _NetworkFileViewerPageState extends State<NetworkFileViewerPage> {
@@ -39,13 +34,7 @@ class _NetworkFileViewerPageState extends State<NetworkFileViewerPage> {
         downloadUrl: widget.downloadUrl,
         downloadPath: widget.downloadPath,
         onViewPressed: () {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (ctx) {
-                return LocalFileViewerPage(filePath: widget.downloadPath);
-              },
-            ),
-          );
+          Get.off(LocalFileViewerPage(filePath: widget.downloadPath));
         },
       ),
     );

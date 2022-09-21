@@ -269,26 +269,19 @@ class _LessonScreenState extends State<LessonScreen> {
     if (!await asset2Local(type, assetPath)) {
       return;
     }
-
-    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-      return LocalFileViewerPage(filePath: filePath);
-    }));
+    Get.to(LocalFileViewerPage(filePath: filePath));
   }
 
   Future onNetworkTap(String title, String type, String downloadUrl) async {
     String filePath = await setFilePath(type, title);
 
     if (fileExists(filePath)) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-        return LocalFileViewerPage(filePath: filePath);
-      }));
+      Get.to(LocalFileViewerPage(filePath: filePath));
     } else {
-      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-        return NetworkFileViewerPage(
-          downloadUrl: downloadUrl,
-          downloadPath: filePath,
-        );
-      }));
+      Get.to(NetworkFileViewerPage(
+        downloadUrl: downloadUrl,
+        downloadPath: filePath,
+      ));
     }
   }
 
@@ -301,7 +294,6 @@ class _LessonScreenState extends State<LessonScreen> {
     }
 
     await file.create(recursive: true);
-    debugPrint("文件路径 -> ${file.path}");
     ByteData bd = await rootBundle.load(assetPath);
     await file.writeAsBytes(bd.buffer.asUint8List(), flush: true);
     return true;
