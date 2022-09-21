@@ -1,12 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:mualim/auth/otp_screen.dart';
 import 'package:mualim/constants/app_theme.dart';
-import 'package:mualim/controllers/registration_controller.dart';
 import 'package:mualim/helper/helper.dart';
 import 'package:mualim/model/registration_model.dart';
-
-final registrationController = Get.put(RegistrationController());
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -143,6 +142,38 @@ class _SignupScreenState extends State<SignupScreen> {
                             borderSide: BorderSide.none,
                           ),
                           hintText: 'Organization',
+                          hintStyle: TextStyle(
+                            color: AppTheme.fonts.withOpacity(0.5),
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 5.0,
+                        horizontal: 20,
+                      ),
+                      child: TextFormField(
+                        controller: designation,
+                        keyboardType: TextInputType.text,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return 'please enter the designation';
+                          } else {
+                            return null;
+                          }
+                        },
+                        decoration: InputDecoration(
+                          isDense: true,
+                          filled: true,
+                          fillColor: AppTheme.secondary.withOpacity(0.075),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
+                          ),
+                          hintText: 'Designation',
                           hintStyle: TextStyle(
                             color: AppTheme.fonts.withOpacity(0.5),
                             fontSize: 14,
@@ -478,30 +509,30 @@ class _SignupScreenState extends State<SignupScreen> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (formKey.currentState!.validate()) {
-                      Map<String, dynamic> data = {
-                        "name": fullName.text,
-                        "email": email.text,
-                        "password": confirmPassword.text,
-                        "gender": gender.value,
-                        "organization": organization.text,
-                        "designation": designation.text,
-                        "qualification": qualification.text,
-                        "experience": experience.text,
-                        "cnic": cnic.text,
-                        "phone": number.dialCode.toString() +
-                            phoneNo.text.toString(),
-                      };
-                      await registrationController
-                          .registrationProcess(data)
-                          .then((response) {
-                        if (response!.status == 201) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("User Register Successfully"),
-                            ),
-                          );
-                        }
-                      });
+                      // await FirebaseAuth.instance.verifyPhoneNumber(
+                      //   phoneNumber:
+                      //       number.isoCode.toString() + phoneNo.text.toString(),
+                      //   verificationCompleted:
+                      //       (PhoneAuthCredential credential) {
+                          Map<String, dynamic> data = {
+                            "name": fullName.text,
+                            "email": email.text,
+                            "password": confirmPassword.text,
+                            "gender": gender.value,
+                            "organization": organization.text,
+                            "designation": designation.text,
+                            "qualification": qualification.text,
+                            "experience": experience.text,
+                            "cnic": cnic.text,
+                            "phone": number.dialCode.toString() +
+                                phoneNo.text.toString(),
+                          };
+                          Get.to(OTPScreen(data: data));
+                      //   },
+                      //   verificationFailed: (FirebaseAuthException e) {},
+                      //   codeSent: (String verificationId, int? resendToken) {},
+                      //   codeAutoRetrievalTimeout: (String verificationId) {},
+                      // );
                     }
                   },
                   style: ButtonStyle(
@@ -519,7 +550,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                   ),
-                  child: const Text('Sign Up'),
+                  child: const Text('Next'),
                 ),
               ),
               Padding(

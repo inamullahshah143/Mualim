@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mualim/model/chapter_model.dart';
 import 'package:mualim/model/specific_subject_model.dart';
@@ -9,7 +10,7 @@ import 'package:mualim/model/subject_model.dart';
 import '../utils/api_utils.dart';
 
 class SubjectController extends GetxController {
-  Stream<SubjectModel?> loadSubjects() async* {
+  Stream<SubjectModel?> loadSubjects(context) async* {
     try {
       final response = await Dio().get(
         '${ApiUtils.baseUrl}/all/subjects',
@@ -19,19 +20,22 @@ class SubjectController extends GetxController {
           },
         ),
       );
-      print(response.data);
       if (response.statusCode == 200) {
         yield subjectModelFromJson(jsonEncode(response.data));
       } else {
         yield null;
       }
     } on DioError catch (e) {
-      print(e.response);
+        ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.response!.data['errors']),
+        ),
+      );
       yield null;
     }
   }
 
-  Stream<SpecificSubjectModel?> specificSubjects(int subjectId) async* {
+  Stream<SpecificSubjectModel?> specificSubjects(int subjectId,context) async* {
     try {
       final response = await Dio().post(
         '${ApiUtils.baseUrl}/subject',
@@ -42,19 +46,22 @@ class SubjectController extends GetxController {
           },
         ),
       );
-      print(response.data);
       if (response.statusCode == 200) {
         yield specificSubjectModelFromJson(jsonEncode(response.data));
       } else {
         yield null;
       }
     } on DioError catch (e) {
-      print(e.response);
+        ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.response!.data['errors']),
+        ),
+      );
       yield null;
     }
   }
 
-  Future<ChapterModel?> chapterDetails(int chapterId) async {
+  Future<ChapterModel?> chapterDetails(int chapterId,context) async {
     try {
       final response = await Dio().post(
         '${ApiUtils.baseUrl}/chapter',
@@ -65,14 +72,17 @@ class SubjectController extends GetxController {
           },
         ),
       );
-      print(response.data);
       if (response.statusCode == 200) {
         return chapterModelFromJson(jsonEncode(response.data));
       } else {
         return null;
       }
     } on DioError catch (e) {
-      print(e.response);
+        ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.response!.data['errors']),
+        ),
+      );
 
       return null;
     }

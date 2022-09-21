@@ -14,7 +14,7 @@ class SavedCourses extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<SubjectModel?>(
-      stream: subjectController.loadSubjects(),
+      stream: subjectController.loadSubjects(context),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:

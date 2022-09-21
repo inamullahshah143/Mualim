@@ -121,7 +121,7 @@ class _DetailedCourseState extends State<DetailedCourse> {
 
   Widget listView() {
     return StreamBuilder<SpecificSubjectModel?>(
-      stream: subjectController.specificSubjects(widget.subjectId),
+      stream: subjectController.specificSubjects(widget.subjectId,context),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:

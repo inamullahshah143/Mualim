@@ -63,7 +63,7 @@ class _LessonScreenState extends State<LessonScreen> {
           ],
         ),
         body: FutureBuilder<ChapterModel?>(
-          future: subjectController.chapterDetails(widget.chapterId),
+          future: subjectController.chapterDetails(widget.chapterId,context),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:

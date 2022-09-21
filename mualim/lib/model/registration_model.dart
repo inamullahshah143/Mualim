@@ -1,6 +1,4 @@
-// To parse this JSON data, do
-//
-//     final registrationModel = registrationModelFromJson(jsonString);
+
 
 import 'dart:convert';
 
@@ -50,7 +48,6 @@ class Data {
     required this.cnic,
     required this.phone,
     required this.email,
-    required this.subjectId,
     required this.updatedAt,
     required this.createdAt,
     required this.id,
@@ -65,7 +62,6 @@ class Data {
   String cnic;
   String phone;
   String email;
-  String subjectId;
   DateTime updatedAt;
   DateTime createdAt;
   int id;
@@ -80,7 +76,6 @@ class Data {
         cnic: json["cnic"],
         phone: json["phone"],
         email: json["email"],
-        subjectId: json["subject_id"],
         updatedAt: DateTime.parse(json["updated_at"]),
         createdAt: DateTime.parse(json["created_at"]),
         id: json["id"],
@@ -96,7 +91,6 @@ class Data {
         "cnic": cnic,
         "phone": phone,
         "email": email,
-        "subject_id": subjectId,
         "updated_at": updatedAt.toIso8601String(),
         "created_at": createdAt.toIso8601String(),
         "id": id,
