@@ -429,15 +429,16 @@ class _SignupScreenState extends State<SignupScreen> {
                   onPressed: () async {
                     Map<String, dynamic> data = {
                       "name": "Inamullah Shah",
-                      "email": "inam.worspa@gmail.com",
-                      "password": "shahgee143",
+                      "email": "inam.work@gmail.com",
+                      "password": "Shahgee@143",
                       "gender": "male",
                       "organization": "YC Solution",
                       "designation": "Flutter Developer",
                       "qualification": "BS (SE)",
                       "experience": "1",
-                      "cnic": "3740642939",
-                      "phone": "03105158",
+                      "cnic": "3740642933669",
+                      "phone": "031015154",
+                      "subject_id": "1",
                     };
                     await registrationController
                         .registrationProcess(data)
