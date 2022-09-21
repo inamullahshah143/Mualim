@@ -54,11 +54,11 @@ class SubjectController extends GetxController {
     }
   }
 
-  Future<ChapterModel?> chapterDetails(int subjectId) async {
+  Future<ChapterModel?> chapterDetails(int chapterId) async {
     try {
       final response = await Dio().post(
-        '${ApiUtils.baseUrl}/subject',
-        data: {'subject_id': subjectId},
+        '${ApiUtils.baseUrl}/chapter',
+        data: {'chapter_id': chapterId},
         options: Options(
           headers: {
             'Authorization': 'Bearer 9|GSCv5xEga70j4SXZjBKwVrDTE47SgfaNdwThsosZ'

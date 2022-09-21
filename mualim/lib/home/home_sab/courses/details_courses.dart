@@ -142,7 +142,8 @@ class _DetailedCourseState extends State<DetailedCourse> {
                   child: MaterialButton(
                     onPressed: () {
                       Get.to(LessonScreen(
-                        title: widget.title,
+                        chapterId: data.subject.chapter[index].id,
+                        title: data.subject.chapter[index].name,
                       ));
                     },
                     elevation: 1.0,
