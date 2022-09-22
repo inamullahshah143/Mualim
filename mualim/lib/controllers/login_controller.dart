@@ -17,7 +17,6 @@ class LoginController extends GetxController {
         data: data,
       );
       if (response.statusCode == 201) {
-        print(response.data);
         return loginModelFromJson(jsonEncode(response.data));
       } else {
         return null;

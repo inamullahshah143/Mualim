@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:mualim/auth/onboard_screen.dart';
 import 'package:mualim/constants/app_theme.dart';
@@ -9,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 SharedPreferences? prefs;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await FlutterDownloader.initialize(debug: true);
   await Firebase.initializeApp();
   prefs = await SharedPreferences.getInstance();
   WidgetsFlutterBinding.ensureInitialized();

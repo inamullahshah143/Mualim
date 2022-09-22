@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:better_player/better_player.dart';
 import 'package:get/get.dart';
+import 'package:mualim/constants/pdf_view.dart';
+import 'package:mualim/controllers/download_controller.dart';
 import 'package:mualim/controllers/subject_controller.dart';
 import 'package:mualim/model/chapter_model.dart';
 import 'package:mualim/utils/api_utils.dart';
 import '../../../constants/app_theme.dart';
 
 final subjectController = Get.put(SubjectController());
+
+final downloadController = Get.put(DownloadController());
 
 class LessonScreen extends StatefulWidget {
   final int chapterId;
@@ -64,6 +68,9 @@ class _LessonScreenState extends State<LessonScreen> {
                             return PopupMenuItem<String>(
                               value: choice,
                               child: Text(choice),
+                              onTap: () {
+                                downloadController.downloadFile(ApiUtils.storageUrl +data.chapter.content.first.video);
+                              },
                             );
                           }).toList();
                         },
@@ -121,7 +128,22 @@ class _LessonScreenState extends State<LessonScreen> {
                         child: TabBarView(
                           controller: tabController,
                           children: [
-                            Column(children: const []),
+                            Column(children: [
+                              MaterialButton(
+                                onPressed: () {
+                                  Get.to(
+                                    Reader(
+                                      file: ApiUtils.storageUrl +
+                                          data.chapter.content.first.file,
+                                      title: data.chapter.content.first.file
+                                          .split('/')
+                                          .last,
+                                    ),
+                                  );
+                                },
+                                child: const Text('Open File'),
+                              )
+                            ]),
                             messagesList(),
                           ],
                         ),
