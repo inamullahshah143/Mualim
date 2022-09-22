@@ -6,6 +6,7 @@ import 'package:mualim/auth/registration_screen.dart';
 import 'package:mualim/constants/app_theme.dart';
 import 'package:mualim/helper/helper.dart';
 import 'package:mualim/home/drawer/menu_drawer.dart';
+import 'package:mualim/main.dart';
 
 import 'forget_password.dart';
 import 'otp_screen.dart';
@@ -187,17 +188,28 @@ class LoginScreen extends StatelessWidget {
                     horizontal: 20,
                   ),
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (formKey.currentState!.validate()) {
                         Map<String, dynamic> data = {
-                          "phone": number.dialCode.toString() +
-                              phoneNo.text.toString(),
+                          "phone": '0${phoneNo.text}',
                           "password": password.text,
                         };
-                        Get.to(OTPScreen(
-                          data: data,
-                          isLogin: true,
-                        ));
+                        await loginController.loginProcess(data, context).then(
+                          (response) {
+                            if (response!.success == 'successfully login') {
+                              prefs!.setString('username', response.user.name);
+                              prefs!.setString('email', response.user.email);
+                              prefs!.setString('phone', response.user.phone);
+                              prefs!.setString('token', response.token);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("User Login Successfully"),
+                                ),
+                              );
+                              Get.offAll(const MenuDrawer());
+                            }
+                          },
+                        );
                       }
                     },
                     style: ButtonStyle(
