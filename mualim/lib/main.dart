@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_file_view/flutter_file_view.dart';
 import 'package:get/get.dart';
 import 'package:mualim/auth/onboard_screen.dart';
 import 'package:mualim/constants/app_theme.dart';
@@ -34,9 +33,6 @@ class MyApp extends StatelessWidget {
           child: child!,
         );
       },
-      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-        ViewerLocalizationsDelegate.delegate,
-      ],
       title: 'Mualim',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

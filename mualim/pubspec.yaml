@@ -45,7 +45,6 @@ dependencies:
   better_player: ^0.0.83
   permission_handler: ^10.0.1
   path_provider: ^2.0.11
-  flutter_file_view: ^2.0.8+5
   shared_preferences: ^2.0.15
   otp_text_field: ^1.1.3
   firebase_auth: ^3.9.0

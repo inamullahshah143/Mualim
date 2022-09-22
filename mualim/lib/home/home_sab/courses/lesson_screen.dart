@@ -1,17 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:better_player/better_player.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:mualim/constants/local_file_viewer.dart';
-import 'package:mualim/constants/network_file_viewer.dart';
 import 'package:mualim/controllers/subject_controller.dart';
 import 'package:mualim/model/chapter_model.dart';
 import 'package:mualim/utils/api_utils.dart';
-import 'package:path_provider/path_provider.dart';
-
 import '../../../constants/app_theme.dart';
 
 final subjectController = Get.put(SubjectController());
@@ -129,62 +121,7 @@ class _LessonScreenState extends State<LessonScreen> {
                         child: TabBarView(
                           controller: tabController,
                           children: [
-                            SingleChildScrollView(
-                              physics: const BouncingScrollPhysics(),
-                              child: Column(
-                                children: [
-                                  ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: files.length,
-                                    itemBuilder: (context, index) {
-                                      String filePath = files[index];
-                                      String fileShowText = '';
-
-                                      int i = filePath.lastIndexOf('/');
-                                      if (i <= -1) {
-                                        fileShowText = filePath;
-                                      } else {
-                                        fileShowText =
-                                            filePath.substring(i + 1);
-                                      }
-
-                                      int j = fileShowText.lastIndexOf('.');
-
-                                      String title = '';
-                                      String type = '';
-
-                                      if (j > -1) {
-                                        title = fileShowText.substring(0, j);
-                                        type = fileShowText
-                                            .substring(j + 1)
-                                            .toLowerCase();
-                                      }
-
-                                      final child = ElevatedButton(
-                                        onPressed: () {
-                                          if (filePath.contains('http://') ||
-                                              filePath.contains('https://')) {
-                                            onNetworkTap(title, type, filePath);
-                                          } else {
-                                            onLocalTap(
-                                                type, 'assets/files/$filePath');
-                                          }
-                                        },
-                                        child: Text(fileShowText),
-                                      );
-
-                                      return Container(
-                                        margin:
-                                            const EdgeInsets.only(top: 10.0),
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 15.0),
-                                        child: child,
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
+                            Column(children: const []),
                             messagesList(),
                           ],
                         ),
@@ -267,54 +204,12 @@ class _LessonScreenState extends State<LessonScreen> {
     );
   }
 
-  Future onLocalTap(String type, String assetPath) async {
-    String filePath = await setFilePath(type, assetPath);
-    if (!await asset2Local(type, assetPath)) {
-      return;
-    }
-    Get.to(LocalFileViewerPage(filePath: filePath));
+  List<BetterPlayerDataSource> createDataSet(String url) {
+    List<BetterPlayerDataSource> dataSourceList = <BetterPlayerDataSource>[];
+    dataSourceList.add(
+      BetterPlayerDataSource(
+          BetterPlayerDataSourceType.network, ApiUtils.storageUrl + url),
+    );
+    return dataSourceList;
   }
-
-  Future onNetworkTap(String title, String type, String downloadUrl) async {
-    String filePath = await setFilePath(type, title);
-
-    if (fileExists(filePath)) {
-      Get.to(LocalFileViewerPage(filePath: filePath));
-    } else {
-      Get.to(NetworkFileViewerPage(
-        downloadUrl: downloadUrl,
-        downloadPath: filePath,
-      ));
-    }
-  }
-
-  Future asset2Local(String type, String assetPath) async {
-    String filePath = await setFilePath(type, assetPath);
-
-    File file = File(filePath);
-    if (fileExists(filePath)) {
-      await file.delete();
-    }
-
-    await file.create(recursive: true);
-    ByteData bd = await rootBundle.load(assetPath);
-    await file.writeAsBytes(bd.buffer.asUint8List(), flush: true);
-    return true;
-  }
-
-  Future setFilePath(String type, String assetPath) async {
-    final directory = await getTemporaryDirectory();
-    return "${directory.path}/fileview/${base64.encode(utf8.encode(assetPath))}.$type";
-  }
-
-  bool fileExists(String filePath) => File(filePath).existsSync();
-}
-
-List<BetterPlayerDataSource> createDataSet(String url) {
-  List<BetterPlayerDataSource> dataSourceList = <BetterPlayerDataSource>[];
-  dataSourceList.add(
-    BetterPlayerDataSource(
-        BetterPlayerDataSourceType.network, ApiUtils.storageUrl + url),
-  );
-  return dataSourceList;
 }
