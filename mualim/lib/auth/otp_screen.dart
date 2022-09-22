@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mualim/constants/app_theme.dart';
+import 'package:mualim/controllers/login_controller.dart';
 import 'package:mualim/main.dart';
 import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
@@ -11,23 +13,28 @@ import '../controllers/registration_controller.dart';
 import '../home/drawer/menu_drawer.dart';
 
 final registrationController = Get.put(RegistrationController());
+final loginController = Get.put(LoginController());
 
 class OTPScreen extends StatefulWidget {
   final Map<String, dynamic> data;
-  const OTPScreen({Key? key, required this.data}) : super(key: key);
+  final bool isLogin;
+  const OTPScreen({Key? key, required this.data, required this.isLogin})
+      : super(key: key);
 
   @override
   State<OTPScreen> createState() => _OTPScreenState();
 }
 
 class _OTPScreenState extends State<OTPScreen> {
-  int secondsRemaining = 30;
+  int secondsRemaining = 60;
   bool enableResend = false;
   Timer? timer;
+  String? _verificationCode;
+  final OtpFieldController _pinPutController = OtpFieldController();
 
   @override
   initState() {
-    super.initState();
+    _verifyPhone();
     timer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (secondsRemaining != 0) {
         setState(() {
@@ -39,11 +46,13 @@ class _OTPScreenState extends State<OTPScreen> {
         });
       }
     });
+    super.initState();
   }
 
   void _resendCode() {
+    _verifyPhone();
     setState(() {
-      secondsRemaining = 30;
+      secondsRemaining = 60;
       enableResend = false;
     });
   }
@@ -128,14 +137,77 @@ class _OTPScreenState extends State<OTPScreen> {
               Align(
                 alignment: Alignment.topCenter,
                 child: OTPTextField(
-                  length: 5,
+                  controller: _pinPutController,
+                  length: 6,
                   width: MediaQuery.of(context).size.width * 0.8,
                   fieldWidth: 48,
                   outlineBorderRadius: 5,
+                  otpFieldStyle: OtpFieldStyle(
+                    focusBorderColor: AppTheme.primary,
+                  ),
                   style: const TextStyle(fontSize: 16),
                   textFieldAlignment: MainAxisAlignment.spaceEvenly,
                   fieldStyle: FieldStyle.box,
-                  onCompleted: (pin) {},
+                  onCompleted: (pin) async {
+                    try {
+                      await FirebaseAuth.instance
+                          .signInWithCredential(PhoneAuthProvider.credential(
+                              verificationId: _verificationCode!, smsCode: pin))
+                          .then((value) async {
+                        if (value.user != null) {
+                          if (widget.isLogin) {
+                            await loginController
+                                .loginProcess(widget.data, context)
+                                .then(
+                              (response) {
+                                if (response!.success == 'successfully login') {
+                                  prefs!.setString(
+                                      'username', response.user.name);
+                                  prefs!
+                                      .setString('email', response.user.email);
+                                  prefs!
+                                      .setString('phone', response.user.phone);
+                                  prefs!.setString('token', response.token);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("User Login Successfully"),
+                                    ),
+                                  );
+                                  Get.offAll(const MenuDrawer());
+                                }
+                              },
+                            );
+                          } else {
+                            await registrationController
+                                .registrationProcess(widget.data, context)
+                                .then(
+                              (response) {
+                                if (response!.status == 201) {
+                                  prefs!.setString(
+                                      'username', response.data.name);
+                                  prefs!
+                                      .setString('email', response.data.email);
+                                  prefs!
+                                      .setString('phone', response.data.phone);
+                                  prefs!.setString('token', response.token);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text("User Register Successfully"),
+                                    ),
+                                  );
+                                  Get.offAll(const MenuDrawer());
+                                }
+                              },
+                            );
+                          }
+                        }
+                      });
+                    } catch (e) {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(e.toString())));
+                    }
+                  },
                 ),
               ),
               const SizedBox(
@@ -205,50 +277,74 @@ class _OTPScreenState extends State<OTPScreen> {
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 5.0,
-          horizontal: 20,
-        ),
-        child: ElevatedButton(
-          onPressed: () async {
-            await registrationController
-                .registrationProcess(widget.data, context)
-                .then(
-              (response) {
-                if (response!.status == 201) {
-                  prefs!.setString('username', response.data.name);
-                  prefs!.setString('email', response.data.email);
-                  prefs!.setString('phone', response.data.phone);
-                  prefs!.setString('token', response.token);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("User Register Successfully"),
-                    ),
-                  );
-                  Get.offAll(const MenuDrawer());
-                }
-              },
-            );
-          },
-          style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all<Color>(AppTheme.white),
-            overlayColor: MaterialStateProperty.all<Color>(
-              AppTheme.white.withOpacity(0.1),
-            ),
-            minimumSize: MaterialStateProperty.all(
-              Size(MediaQuery.of(context).size.width, 45),
-            ),
-            shape: MaterialStateProperty.all(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          ),
-          child: const Text('Next'),
-        ),
-      ),
     );
+  }
+
+  _verifyPhone() async {
+    await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: widget.data['phone'],
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          await FirebaseAuth.instance
+              .signInWithCredential(credential)
+              .then((value) async {
+            if (value.user != null) {
+              if (widget.isLogin) {
+                await loginController.loginProcess(widget.data, context).then(
+                  (response) {
+                    if (response!.success == 'successfully login') {
+                      prefs!.setString('username', response.user.name);
+                      prefs!.setString('email', response.user.email);
+                      prefs!.setString('phone', response.user.phone);
+                      prefs!.setString('token', response.token);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("User Login Successfully"),
+                        ),
+                      );
+                      Get.offAll(const MenuDrawer());
+                    }
+                  },
+                );
+              } else {
+                await registrationController
+                    .registrationProcess(widget.data, context)
+                    .then(
+                  (response) {
+                    if (response!.status == 201) {
+                      prefs!.setString('username', response.data.name);
+                      prefs!.setString('email', response.data.email);
+                      prefs!.setString('phone', response.data.phone);
+                      prefs!.setString('token', response.token);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("User Register Successfully"),
+                        ),
+                      );
+                      Get.offAll(const MenuDrawer());
+                    }
+                  },
+                );
+              }
+            }
+          });
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(e.message.toString()),
+            ),
+          );
+        },
+        codeSent: (String? verficationID, int? resendToken) {
+          setState(() {
+            _verificationCode = verficationID;
+          });
+        },
+        codeAutoRetrievalTimeout: (String verificationID) {
+          setState(() {
+            _verificationCode = verificationID;
+          });
+        },
+        timeout: const Duration(seconds: 120));
   }
 }

@@ -121,11 +121,14 @@ class _DetailedCourseState extends State<DetailedCourse> {
 
   Widget listView() {
     return StreamBuilder<SpecificSubjectModel?>(
-      stream: subjectController.specificSubjects(widget.subjectId,context),
+      stream: subjectController.specificSubjects(widget.subjectId, context),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
-            return const Text('Loading....');
+            return const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: CircularProgressIndicator(),
+            );
           default:
             if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
@@ -143,7 +146,6 @@ class _DetailedCourseState extends State<DetailedCourse> {
                     onPressed: () {
                       Get.to(LessonScreen(
                         chapterId: data.subject.chapter[index].id,
-                        title: data.subject.chapter[index].name,
                       ));
                     },
                     elevation: 1.0,

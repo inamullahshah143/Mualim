@@ -22,7 +22,11 @@ class _AllCoursesState extends State<AllCourses> {
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
-            return const Text('Loading....');
+            return const Expanded(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
           default:
             if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');

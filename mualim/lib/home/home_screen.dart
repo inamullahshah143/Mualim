@@ -6,6 +6,7 @@ import 'package:mualim/constants/app_theme.dart';
 import 'package:mualim/home/home_sab/all_courses.dart';
 import 'package:mualim/home/home_sab/saved_courses.dart';
 import 'package:mualim/home/home_sab/studying_courses.dart';
+import 'package:mualim/main.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -25,9 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
         automaticallyImplyLeading: true,
         backgroundColor: AppTheme.transparent,
         foregroundColor: AppTheme.fonts,
-        actions: [
-          IconButton(onPressed: () {}, icon: const Icon(LineIcons.bell)),
-        ],
+        // actions: [
+        //   IconButton(onPressed: () {}, icon: const Icon(LineIcons.bell)),
+        // ],
         leading: IconButton(
           onPressed: () {
             if (ZoomDrawer.of(context)!.isOpen()) {
@@ -50,9 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: RichText(
-                text: const TextSpan(
+                text: TextSpan(
                   children: [
-                    TextSpan(
+                    const TextSpan(
                       text: 'Welcome\n',
                       style: TextStyle(
                         fontSize: 18,
@@ -62,8 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     TextSpan(
-                      text: 'Inamullah!',
-                      style: TextStyle(
+                      text: prefs!.getString('username').toString(),
+                      style: const TextStyle(
                         fontSize: 24,
                         fontFamily: "Metropolis",
                         height: 1.25,

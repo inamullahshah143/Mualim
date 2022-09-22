@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -19,7 +18,7 @@ class _SignupScreenState extends State<SignupScreen> {
   RegistrationModel? registrationModel;
   final String initialCountry = 'PK';
   final gender = ''.obs;
-  final PhoneNumber number = PhoneNumber(isoCode: 'PK', dialCode: '0');
+  final PhoneNumber number = PhoneNumber(isoCode: 'PK', dialCode: '+92');
   final isValidNo = true.obs;
   final formKey = GlobalKey<FormState>();
   final TextEditingController fullName = TextEditingController();
@@ -362,6 +361,9 @@ class _SignupScreenState extends State<SignupScreen> {
                           isValidNo.value = value;
                         },
                         selectorConfig: const SelectorConfig(
+                            trailingSpace: false,
+                            setSelectorButtonAsPrefixIcon: true,
+                            showFlags: false,
                           selectorType: PhoneInputSelectorType.DIALOG,
                         ),
                         ignoreBlank: false,
@@ -509,30 +511,23 @@ class _SignupScreenState extends State<SignupScreen> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (formKey.currentState!.validate()) {
-                      // await FirebaseAuth.instance.verifyPhoneNumber(
-                      //   phoneNumber:
-                      //       number.isoCode.toString() + phoneNo.text.toString(),
-                      //   verificationCompleted:
-                      //       (PhoneAuthCredential credential) {
-                          Map<String, dynamic> data = {
-                            "name": fullName.text,
-                            "email": email.text,
-                            "password": confirmPassword.text,
-                            "gender": gender.value,
-                            "organization": organization.text,
-                            "designation": designation.text,
-                            "qualification": qualification.text,
-                            "experience": experience.text,
-                            "cnic": cnic.text,
-                            "phone": number.dialCode.toString() +
-                                phoneNo.text.toString(),
-                          };
-                          Get.to(OTPScreen(data: data));
-                      //   },
-                      //   verificationFailed: (FirebaseAuthException e) {},
-                      //   codeSent: (String verificationId, int? resendToken) {},
-                      //   codeAutoRetrievalTimeout: (String verificationId) {},
-                      // );
+                      Map<String, dynamic> data = {
+                        "name": fullName.text,
+                        "email": email.text,
+                        "password": confirmPassword.text,
+                        "gender": gender.value,
+                        "organization": organization.text,
+                        "designation": designation.text,
+                        "qualification": qualification.text,
+                        "experience": experience.text,
+                        "cnic": cnic.text,
+                        "phone": number.dialCode.toString() +
+                            phoneNo.text.toString(),
+                      };
+                      Get.to(OTPScreen(
+                        data: data,
+                        isLogin: false,
+                      ));
                     }
                   },
                   style: ButtonStyle(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:mualim/constants/app_theme.dart';
+import 'package:mualim/main.dart';
 
 class MenuItems extends StatelessWidget {
   const MenuItems({Key? key}) : super(key: key);
@@ -17,19 +18,19 @@ class MenuItems extends StatelessWidget {
             padding: const EdgeInsets.all(15.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                CircleAvatar(
+              children: [
+                const CircleAvatar(
                   radius: 50,
                   backgroundColor: Colors.transparent,
                   backgroundImage: NetworkImage(
                       'https://1.bp.blogspot.com/-ytMsk6NJCIc/YRDL86N7-CI/AAAAAAAAM_Q/3VFXo2IqsmMxqKbZYlERxjcLX7uA1L67QCLcBGAsYHQ/s500/unique-boys-whatsapp-dp-images-boys-dpz-dp-for-boys-profile-pictures-for-Boys%2B%25281%2529.jpg'),
                 ),
                 Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 10.0, vertical: 10.0),
                   child: Text(
-                    'Username',
-                    style: TextStyle(
+                    prefs!.getString('username').toString(),
+                    style: const TextStyle(
                       fontSize: 16,
                       color: AppTheme.fonts,
                       fontWeight: FontWeight.bold,
@@ -37,10 +38,10 @@ class MenuItems extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: Text(
-                    'example@email.com',
-                    style: TextStyle(
+                    prefs!.getString('email').toString(),
+                    style: const TextStyle(
                       color: AppTheme.fonts,
                     ),
                   ),

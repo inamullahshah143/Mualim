@@ -18,10 +18,8 @@ final subjectController = Get.put(SubjectController());
 
 class LessonScreen extends StatefulWidget {
   final int chapterId;
-  final String title;
 
-  const LessonScreen({Key? key, required this.title, required this.chapterId})
-      : super(key: key);
+  const LessonScreen({Key? key, required this.chapterId}) : super(key: key);
 
   @override
   State<LessonScreen> createState() => _LessonScreenState();
@@ -39,45 +37,48 @@ class _LessonScreenState extends State<LessonScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        backgroundColor: AppTheme.placeholder,
-        appBar: AppBar(
-          backgroundColor: AppTheme.placeholder,
-          elevation: 0.0,
-          title: Text(widget.title),
-          foregroundColor: AppTheme.primary,
-          actions: [
-            PopupMenuButton<String>(
-              onSelected: handleClick,
-              itemBuilder: (BuildContext context) {
-                return {'Download'}.map((String choice) {
-                  return PopupMenuItem<String>(
-                    value: choice,
-                    child: Text(choice),
-                  );
-                }).toList();
-              },
-            ),
-          ],
-        ),
-        body: FutureBuilder<ChapterModel?>(
-          future: subjectController.chapterDetails(widget.chapterId,context),
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-                return const Text('Loading....');
-              default:
-                if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  final data = snapshot.data;
+    return FutureBuilder<ChapterModel?>(
+      future: subjectController.chapterDetails(widget.chapterId, context),
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          default:
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              final data = snapshot.data;
+              files.clear();
+              files.add(ApiUtils.storageUrl + data!.chapter.content.first.file);
 
-                  files.add(
-                      ApiUtils.storageUrl + data!.chapter.content.first.file);
-
-                  return Column(
+              return DefaultTabController(
+                length: 2,
+                child: Scaffold(
+                  backgroundColor: AppTheme.placeholder,
+                  appBar: AppBar(
+                    backgroundColor: AppTheme.placeholder,
+                    elevation: 0.0,
+                    title: Text(data.chapter.name),
+                    foregroundColor: AppTheme.primary,
+                    actions: [
+                      PopupMenuButton<String>(
+                        onSelected: handleClick,
+                        itemBuilder: (BuildContext context) {
+                          return {'Download'}.map((String choice) {
+                            return PopupMenuItem<String>(
+                              value: choice,
+                              child: Text(choice),
+                            );
+                          }).toList();
+                        },
+                      ),
+                    ],
+                  ),
+                  body: Column(
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(15.0),
@@ -189,39 +190,41 @@ class _LessonScreenState extends State<LessonScreen> {
                         ),
                       ),
                     ],
-                  );
-                }
-            }
-          },
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-          ),
-          child: ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateProperty.all<Color>(Colors.transparent),
-              foregroundColor:
-                  MaterialStateProperty.all<Color>(AppTheme.primary),
-              overlayColor: MaterialStateProperty.all<Color>(
-                  AppTheme.primary.withOpacity(0.1)),
-              minimumSize: MaterialStateProperty.all(
-                Size(MediaQuery.of(context).size.width, 45),
-              ),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  side: const BorderSide(color: AppTheme.primary),
+                  ),
+                  floatingActionButtonLocation:
+                      FloatingActionButtonLocation.centerFloat,
+                  floatingActionButton: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                    ),
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Colors.transparent),
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(AppTheme.primary),
+                        overlayColor: MaterialStateProperty.all<Color>(
+                            AppTheme.primary.withOpacity(0.1)),
+                        minimumSize: MaterialStateProperty.all(
+                          Size(MediaQuery.of(context).size.width, 45),
+                        ),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: const BorderSide(color: AppTheme.primary),
+                          ),
+                        ),
+                      ),
+                      onPressed: () {},
+                      child: const Text('Start Quiz'),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            onPressed: () {},
-            child: const Text('Start Quiz'),
-          ),
-        ),
-      ),
+              );
+            }
+        }
+      },
     );
   }
 
