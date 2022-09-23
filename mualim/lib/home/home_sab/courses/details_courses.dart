@@ -156,14 +156,18 @@ class _DetailedCourseState extends State<DetailedCourse> {
                     child: ListTile(
                       contentPadding: EdgeInsets.zero,
                       isThreeLine: true,
-                      dense: true,
                       leading: CircleAvatar(
                         backgroundColor: AppTheme.appThemeColor,
                         child: Text("${index + 1}"),
                       ),
-                      title:
-                          Text(data.subject.chapter[index].name.toUpperCase()),
-                      subtitle: Text(data.subject.chapter[index].description),
+                      title: Text(
+                        data.subject.chapter[index].name.toUpperCase(),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      subtitle: Text(data.subject.chapter[index].description,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,),
                       trailing: IconButton(
                         icon: const Icon(Icons.play_arrow_rounded),
                         onPressed: () {},

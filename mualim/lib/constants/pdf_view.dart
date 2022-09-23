@@ -157,12 +157,13 @@ class _ReaderState extends State<Reader> {
           ),
         ),
         body: Center(
-          child:
-              const PDF(swipeHorizontal: true, enableSwipe: true).cachedFromUrl(
+          child: const PDF(enableSwipe: true).fromUrl(
             widget.file,
-            placeholder: (progress) => const Center(
-              child: CircularProgressIndicator(),
-            ),
+            placeholder: (progress) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            },
             errorWidget: (error) => Center(child: Text(error.toString())),
           ),
         ),

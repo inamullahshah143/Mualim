@@ -69,7 +69,12 @@ class _LessonScreenState extends State<LessonScreen> {
                               value: choice,
                               child: Text(choice),
                               onTap: () {
-                                downloadController.downloadFile(ApiUtils.storageUrl +data.chapter.content.first.video);
+                                if (data
+                                    .chapter.content.first.video.isNotEmpty) {
+                                  downloadController.downloadFile(
+                                      ApiUtils.storageUrl +
+                                          data.chapter.content.first.video);
+                                }
                               },
                             );
                           }).toList();
