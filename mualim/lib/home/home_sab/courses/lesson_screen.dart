@@ -49,7 +49,9 @@ class _LessonScreenState extends State<LessonScreen> {
             } else {
               final data = snapshot.data;
               files.clear();
-              files.add(ApiUtils.storageUrl + data!.chapter.content.first.file);
+              for (var element in data!.chapter.files) {
+                files.add(ApiUtils.storageUrl + element);
+              }
 
               return DefaultTabController(
                 length: 2,
@@ -68,14 +70,7 @@ class _LessonScreenState extends State<LessonScreen> {
                             return PopupMenuItem<String>(
                               value: choice,
                               child: Text(choice),
-                              onTap: () {
-                                if (data
-                                    .chapter.content.first.video.isNotEmpty) {
-                                  downloadController.downloadFile(
-                                      ApiUtils.storageUrl +
-                                          data.chapter.content.first.video);
-                                }
-                              },
+                              onTap: () {},
                             );
                           }).toList();
                         },
@@ -95,8 +90,8 @@ class _LessonScreenState extends State<LessonScreen> {
                                   const BetterPlayerConfiguration(),
                               betterPlayerPlaylistConfiguration:
                                   const BetterPlayerPlaylistConfiguration(),
-                              betterPlayerDataSourceList: createDataSet(
-                                  data.chapter.content.first.video),
+                              betterPlayerDataSourceList:
+                                  createDataSet(data.chapter.videos),
                             ),
                           ),
                         ),
@@ -133,22 +128,30 @@ class _LessonScreenState extends State<LessonScreen> {
                         child: TabBarView(
                           controller: tabController,
                           children: [
-                            Column(children: [
-                              MaterialButton(
-                                onPressed: () {
-                                  Get.to(
-                                    Reader(
-                                      file: ApiUtils.storageUrl +
-                                          data.chapter.content.first.file,
-                                      title: data.chapter.content.first.file
-                                          .split('/')
-                                          .last,
-                                    ),
-                                  );
-                                },
-                                child: const Text('Open File'),
-                              )
-                            ]),
+                            Column(
+                              children: [
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: data.chapter.files.length,
+                                  itemBuilder: ((context, index) {
+                                    return MaterialButton(
+                                      onPressed: () {
+                                        Get.to(
+                                          Reader(
+                                            file: ApiUtils.storageUrl +
+                                                data.chapter.files[index],
+                                            title: data.chapter.files[index]
+                                                .split('/')
+                                                .last,
+                                          ),
+                                        );
+                                      },
+                                      child: const Text('Open File'),
+                                    );
+                                  }),
+                                ),
+                              ],
+                            ),
                             messagesList(),
                           ],
                         ),
@@ -231,12 +234,15 @@ class _LessonScreenState extends State<LessonScreen> {
     );
   }
 
-  List<BetterPlayerDataSource> createDataSet(String url) {
+  List<BetterPlayerDataSource> createDataSet(List<String> url) {
     List<BetterPlayerDataSource> dataSourceList = <BetterPlayerDataSource>[];
-    dataSourceList.add(
-      BetterPlayerDataSource(
-          BetterPlayerDataSourceType.network, ApiUtils.storageUrl + url),
-    );
+    for (var element in url) {
+      dataSourceList.add(
+        BetterPlayerDataSource(
+            BetterPlayerDataSourceType.network, ApiUtils.storageUrl + element),
+      );
+    }
+
     return dataSourceList;
   }
 }

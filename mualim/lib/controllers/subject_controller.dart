@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mualim/main.dart';
 import 'package:mualim/model/chapter_model.dart';
 import 'package:mualim/model/specific_subject_model.dart';
 import 'package:mualim/model/subject_model.dart';
@@ -16,7 +17,7 @@ class SubjectController extends GetxController {
         '${ApiUtils.baseUrl}/all/subjects',
         options: Options(
           headers: {
-            'Authorization': 'Bearer 9|GSCv5xEga70j4SXZjBKwVrDTE47SgfaNdwThsosZ'
+            'Authorization': 'Bearer ${prefs!.getString('token')}'
           },
         ),
       );
@@ -42,7 +43,7 @@ class SubjectController extends GetxController {
         data: {'subject_id': subjectId},
         options: Options(
           headers: {
-            'Authorization': 'Bearer 9|GSCv5xEga70j4SXZjBKwVrDTE47SgfaNdwThsosZ'
+            'Authorization': 'Bearer ${prefs!.getString('token')}'
           },
         ),
       );
@@ -68,7 +69,7 @@ class SubjectController extends GetxController {
         data: {'chapter_id': chapterId},
         options: Options(
           headers: {
-            'Authorization': 'Bearer 9|GSCv5xEga70j4SXZjBKwVrDTE47SgfaNdwThsosZ'
+            'Authorization': 'Bearer ${prefs!.getString('token')}'
           },
         ),
       );
