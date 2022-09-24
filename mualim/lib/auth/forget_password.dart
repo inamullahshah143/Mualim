@@ -68,6 +68,7 @@ class ForgetPassword extends StatelessWidget {
                   controller: email,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) => Helper.validateEmail(value),
+                  onChanged: (value){ },
                   decoration: InputDecoration(
                     isDense: true,
                     filled: true,
@@ -76,6 +77,7 @@ class ForgetPassword extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide.none,
                     ),
+                    
                     hintText: 'Email Address',
                     hintStyle: TextStyle(
                       color: AppTheme.fonts.withOpacity(0.5),
