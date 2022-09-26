@@ -107,7 +107,9 @@ class _DetailedCourseState extends State<DetailedCourse> {
                         ),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      
+                    },
                     child: const Text('Get Started'),
                   ),
                 ),
