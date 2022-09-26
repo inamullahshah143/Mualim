@@ -33,8 +33,10 @@ class Chapter {
     required this.subjectId,
     required this.createdAt,
     required this.updatedAt,
-    required this.content,
-    required this.quiz,
+    required this.chapterNo,
+    required this.videos,
+    required this.files,
+    required this.quizzes,
   });
 
   int id;
@@ -43,8 +45,10 @@ class Chapter {
   int subjectId;
   DateTime createdAt;
   DateTime updatedAt;
-  List<Content> content;
-  List<Quiz> quiz;
+  int chapterNo;
+  List<String> videos;
+  List<String> files;
+  List<Quiz> quizzes;
 
   factory Chapter.fromJson(Map<String, dynamic> json) => Chapter(
         id: json["id"],
@@ -53,9 +57,10 @@ class Chapter {
         subjectId: json["subject_id"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
-        content:
-            List<Content>.from(json["content"].map((x) => Content.fromJson(x))),
-        quiz: List<Quiz>.from(json["quiz"].map((x) => Quiz.fromJson(x))),
+        chapterNo: json["chapter_no"],
+        videos: List<String>.from(json["videos"].map((x) => x)),
+        files: List<String>.from(json["files"].map((x) => x)),
+        quizzes: List<Quiz>.from(json["quizzes"].map((x) => Quiz.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -65,52 +70,10 @@ class Chapter {
         "subject_id": subjectId,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
-        "content": List<dynamic>.from(content.map((x) => x.toJson())),
-        "quiz": List<dynamic>.from(quiz.map((x) => x.toJson())),
-      };
-}
-
-class Content {
-  Content({
-    required this.id,
-    required this.title,
-    required this.note,
-    required this.video,
-    required this.file,
-    required this.chapterId,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  int id;
-  String title;
-  String note;
-  String video;
-  String file;
-  int chapterId;
-  DateTime createdAt;
-  DateTime updatedAt;
-
-  factory Content.fromJson(Map<String, dynamic> json) => Content(
-        id: json["id"],
-        title: json["title"],
-        note: json["note"],
-        video: json["video"],
-        file: json["file"],
-        chapterId: json["chapter_id"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "title": title,
-        "note": note,
-        "video": video,
-        "file": file,
-        "chapter_id": chapterId,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
+        "chapter_no": chapterNo,
+        "videos": List<dynamic>.from(videos.map((x) => x)),
+        "files": List<dynamic>.from(files.map((x) => x)),
+        "quizzes": List<dynamic>.from(quizzes.map((x) => x.toJson())),
       };
 }
 
@@ -120,39 +83,30 @@ class Quiz {
     required this.question,
     required this.details,
     required this.chapterId,
-    required this.firstOption,
-    required this.secondOption,
-    required this.thirdOption,
-    required this.fourthOption,
-    required this.correct,
     required this.createdAt,
     required this.updatedAt,
+    required this.options,
+    required this.correctIndex,
   });
 
   int id;
   String question;
   String details;
   int chapterId;
-  String firstOption;
-  String secondOption;
-  String thirdOption;
-  String fourthOption;
-  int correct;
   DateTime createdAt;
   DateTime updatedAt;
+  List<String> options;
+  int correctIndex;
 
   factory Quiz.fromJson(Map<String, dynamic> json) => Quiz(
         id: json["id"],
         question: json["question"],
         details: json["details"],
         chapterId: json["chapter_id"],
-        firstOption: json["first_option"],
-        secondOption: json["second_option"],
-        thirdOption: json["third_option"],
-        fourthOption: json["fourth_option"],
-        correct: json["correct"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
+        options: List<String>.from(json["options"].map((x) => x)),
+        correctIndex: json["correctIndex"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -160,12 +114,9 @@ class Quiz {
         "question": question,
         "details": details,
         "chapter_id": chapterId,
-        "first_option": firstOption,
-        "second_option": secondOption,
-        "third_option": thirdOption,
-        "fourth_option": fourthOption,
-        "correct": correct,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
+        "options": List<dynamic>.from(options.map((x) => x)),
+        "correctIndex": correctIndex,
       };
 }

@@ -68,6 +68,7 @@ class ForgetPassword extends StatelessWidget {
                   controller: email,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) => Helper.validateEmail(value),
+                  onChanged: (value) {},
                   decoration: InputDecoration(
                     isDense: true,
                     filled: true,
