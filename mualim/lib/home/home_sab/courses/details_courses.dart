@@ -108,7 +108,8 @@ class _DetailedCourseState extends State<DetailedCourse> {
                       ),
                     ),
                     onPressed: () {
-                      
+                      subjectController.getEnrolledAndUpdate(
+                          widget.subjectId, context);
                     },
                     child: const Text('Get Started'),
                   ),
@@ -127,8 +128,7 @@ class _DetailedCourseState extends State<DetailedCourse> {
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
-            return const Padding(
-              padding: EdgeInsets.all(8.0),
+            return const Expanded(
               child: CircularProgressIndicator(),
             );
           default:
@@ -167,9 +167,11 @@ class _DetailedCourseState extends State<DetailedCourse> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      subtitle: Text(data.subject.chapter[index].description,
+                      subtitle: Text(
+                        data.subject.chapter[index].description,
                         maxLines: 2,
-                        overflow: TextOverflow.ellipsis,),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                       trailing: IconButton(
                         icon: const Icon(Icons.play_arrow_rounded),
                         onPressed: () {},

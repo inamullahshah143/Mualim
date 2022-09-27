@@ -44,19 +44,19 @@ class QuizController extends GetxController with SingleGetTickerProviderMixin {
 
   PageController? _pageController;
   PageController get pageController => _pageController!;
-  final List<Quiz> _quiz = sample_data
-      .map(
-        (quiz) => Quiz(
-          chapterId: quiz['chapter_id'],
-          correctIndex: quiz['correctIndex'],
-          details: quiz['details'],
-          id: quiz['id'],
-          options: quiz['options'],
-          question: quiz['question'],
-        ),
-      )
-      .toList();
-  List<Quiz> get quiz => _quiz;
+  // final List<Quiz> _quiz = sample_data
+  //     .map(
+  //       (quiz) => Quiz(
+  //         chapterId: quiz['chapter_id'],
+  //         correctIndex: quiz['correctIndex'],
+  //         details: quiz['details'],
+  //         id: quiz['id'],
+  //         options: quiz['options'],
+  //         question: quiz['question'],
+  //       ),
+  //     )
+  //     .toList();
+  // List<Quiz> get quiz => _quiz;
 
   bool _isAnswered = false;
   bool get isAnswered => _isAnswered;
@@ -104,15 +104,15 @@ class QuizController extends GetxController with SingleGetTickerProviderMixin {
   }
 
   void nextQuestion() {
-    if (_questionNumber.value != _quiz.length) {
-      _isAnswered = false;
-      _pageController!.nextPage(
-          duration: const Duration(milliseconds: 250), curve: Curves.ease);
-      _animationController!.reset();
-      _animationController!.forward().whenComplete(nextQuestion);
-    } else {
-      // Get.to(ScoreScreen());
-    }
+    // if (_questionNumber.value != _quiz.length) {
+    //   _isAnswered = false;
+    //   _pageController!.nextPage(
+    //       duration: const Duration(milliseconds: 250), curve: Curves.ease);
+    //   _animationController!.reset();
+    //   _animationController!.forward().whenComplete(nextQuestion);
+    // } else {
+    //   // Get.to(ScoreScreen());
+    // }
   }
 
   void updateTheQnNum(int index) {

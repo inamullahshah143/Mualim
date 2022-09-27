@@ -39,7 +39,7 @@ class SubjectController extends GetxController {
       int subjectId, context) async* {
     try {
       final response = await Dio().post(
-        '${ApiUtils.baseUrl}/subject',
+        '${ApiUtils.baseUrl}/subjects',
         data: {'subject_id': subjectId},
         options: Options(
           headers: {'Authorization': 'Bearer ${prefs!.getString('token')}'},
@@ -86,29 +86,28 @@ class SubjectController extends GetxController {
   }
 
   Future<ChapterStatusModel?> getEnrolledAndUpdate(
-      int chapterId, int subjectId, context) async {
-    int currentPosition = 0;
+      int subjectId, context) async {
+    int currentPosition;
 
     try {
       await Dio()
           .post(
         '${ApiUtils.baseUrl}/status',
         data: {
-          'chapter_id': chapterId,
+          'subject_id': subjectId,
         },
         options: Options(
           headers: {'Authorization': 'Bearer ${prefs!.getString('token')}'},
         ),
       )
           .then((value) async {
-        currentPosition = currentPosition + int.parse(value.data['satus']['position']);
+        currentPosition = int.parse(value.data['satus']['chapter_no']);
 
         final response = await Dio().post(
           '${ApiUtils.baseUrl}/status/store',
           data: {
-            'chapter_id': chapterId,
+            'chapter_no': currentPosition+1,
             'subject_id': subjectId,
-            'position': currentPosition,
           },
           options: Options(
             headers: {'Authorization': 'Bearer ${prefs!.getString('token')}'},
@@ -123,7 +122,7 @@ class SubjectController extends GetxController {
     } on DioError catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(e.response!.data['errors']),
+          content: Text(e.response!.data),
         ),
       );
 
