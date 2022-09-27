@@ -110,7 +110,6 @@ class SubjectController extends GetxController {
           content: Text(e.response!.data),
         ),
       );
-
       return null;
     }
   }
