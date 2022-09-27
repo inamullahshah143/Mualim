@@ -9,6 +9,8 @@ import 'package:mualim/model/question_model.dart';
 
 class QuestionController extends GetxController
     with SingleGetTickerProviderMixin {
+  List? sampleData;
+  QuestionController( {this.sampleData});
   // Lets animated our progress bar
 
   AnimationController? _animationController;
@@ -18,18 +20,6 @@ class QuestionController extends GetxController
 
   PageController? _pageController;
   PageController get pageController => _pageController!;
-
-  final List<Question> _questions = sampleData
-      .map(
-        (question) => Question(
-          id: question['id'],
-          question: question['question'],
-          options: question['options'],
-          answer: question['answer_index'],
-        ),
-      )
-      .toList();
-  List<Question> get questions => _questions;
 
   bool _isAnswered = false;
   bool get isAnswered => _isAnswered;
@@ -46,10 +36,20 @@ class QuestionController extends GetxController
 
   int _numOfCorrectAns = 0;
   int get numOfCorrectAns => _numOfCorrectAns;
-
-  // called immediately after the widget is allocated memory
+  List<Question>? _questions = [];
+  List<Question> get questions => _questions!;
   @override
   void onInit() {
+    _questions = sampleData!
+        .map(
+          (question) => Question(
+            id: question['id'],
+            question: question['question'],
+            options: question['options'],
+            answer: question['answer_index'],
+          ),
+        )
+        .toList();
     _animationController =
         AnimationController(duration: const Duration(seconds: 60), vsync: this);
     _animation = Tween<double>(begin: 0, end: 1).animate(_animationController!)
@@ -75,19 +75,15 @@ class QuestionController extends GetxController
     _selectedAns = selectedIndex;
 
     if (_correctAns == _selectedAns) _numOfCorrectAns++;
-
-    // It will stop the counter
     _animationController!.stop();
     update();
-
-    // Once user select an ans after 3s it will go to the next qn
     Future.delayed(const Duration(seconds: 3), () {
       nextQuestion();
     });
   }
 
   void nextQuestion() {
-    if (_questionNumber.value != _questions.length) {
+    if (_questionNumber.value != _questions!.length) {
       _isAnswered = false;
       _pageController!.nextPage(
           duration: const Duration(milliseconds: 250), curve: Curves.ease);

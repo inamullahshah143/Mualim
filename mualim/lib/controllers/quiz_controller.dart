@@ -25,7 +25,6 @@ class QuizController extends GetxController {
         return null;
       }
     } on DioError catch (e) {
-      print(e.response.toString());
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(e.response.toString()),

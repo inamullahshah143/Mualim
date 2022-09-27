@@ -6,7 +6,6 @@ import 'package:mualim/controllers/quiz_controller.dart';
 import 'package:mualim/controllers/subject_controller.dart';
 import 'package:mualim/home/home_sab/courses/quiz_screen.dart';
 import 'package:mualim/model/chapter_model.dart';
-import 'package:mualim/model/question_model.dart';
 import 'package:mualim/utils/api_utils.dart';
 import '../../../constants/app_theme.dart';
 
@@ -21,6 +20,7 @@ class LessonScreen extends StatefulWidget {
 
 class _LessonScreenState extends State<LessonScreen> {
   List<String> files = [];
+  List sampleData = [];
   TabController? tabController;
   void handleClick(String value) {
     switch (value) {
@@ -188,7 +188,6 @@ class _LessonScreenState extends State<LessonScreen> {
                             .getQuizzes(widget.chapterId, context)
                             .then((value) {
                           for (var element in value!.quiz) {
-                           
                             sampleData.add(
                               {
                                 "id": element.id,
@@ -199,7 +198,7 @@ class _LessonScreenState extends State<LessonScreen> {
                             );
                           }
                         }).whenComplete(() {
-                          Get.to(const QuizScreen());
+                          Get.to(QuizScreen(sampleData: sampleData));
                         });
                       },
                       child: const Text('Start Quiz'),

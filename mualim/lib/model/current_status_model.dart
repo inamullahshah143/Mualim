@@ -1,38 +1,34 @@
 // To parse this JSON data, do
 //
-//     final chapterStatusModel = chapterStatusModelFromJson(jsonString);
+//     final currentStatusModel = currentStatusModelFromJson(jsonString);
 
 import 'dart:convert';
 
-ChapterStatusModel chapterStatusModelFromJson(String str) =>
-    ChapterStatusModel.fromJson(json.decode(str));
+CurrentStatusModel currentStatusModelFromJson(String str) =>
+    CurrentStatusModel.fromJson(json.decode(str));
 
-String chapterStatusModelToJson(ChapterStatusModel data) =>
+String currentStatusModelToJson(CurrentStatusModel data) =>
     json.encode(data.toJson());
 
-class ChapterStatusModel {
-  ChapterStatusModel({
+class CurrentStatusModel {
+  CurrentStatusModel({
     required this.satus,
-    required this.data,
   });
 
-  String satus;
-  Data data;
+  Satus satus;
 
-  factory ChapterStatusModel.fromJson(Map<String, dynamic> json) =>
-      ChapterStatusModel(
-        satus: json["satus"],
-        data: Data.fromJson(json["data"]),
+  factory CurrentStatusModel.fromJson(Map<String, dynamic> json) =>
+      CurrentStatusModel(
+        satus: Satus.fromJson(json["satus"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "satus": satus,
-        "data": data.toJson(),
+        "satus": satus.toJson(),
       };
 }
 
-class Data {
-  Data({
+class Satus {
+  Satus({
     required this.id,
     required this.teacherId,
     required this.subjectId,
@@ -46,11 +42,11 @@ class Data {
   int teacherId;
   int subjectId;
   int chapterId;
-  int chapterNo;
+  String chapterNo;
   DateTime createdAt;
   DateTime updatedAt;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory Satus.fromJson(Map<String, dynamic> json) => Satus(
         id: json["id"],
         teacherId: json["teacher_id"],
         subjectId: json["subject_id"],

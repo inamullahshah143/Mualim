@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:mualim/main.dart';
 import 'package:mualim/model/chapter_model.dart';
 import 'package:mualim/model/chapter_status_model.dart';
+import 'package:mualim/model/current_status_model.dart';
 import 'package:mualim/model/specific_subject_model.dart';
 import 'package:mualim/model/subject_model.dart';
 
@@ -85,8 +86,64 @@ class SubjectController extends GetxController {
     }
   }
 
-  Future<ChapterStatusModel?> getEnrolledAndUpdate(
+  Future<ChapterStatusModel?> getEnrolledIntoChapter(
       int subjectId, context) async {
+    try {
+      final response = await Dio().post(
+        '${ApiUtils.baseUrl}/status/store',
+        data: {
+          'chapter_no': 1,
+          'subject_id': subjectId,
+        },
+        options: Options(
+          headers: {'Authorization': 'Bearer ${prefs!.getString('token')}'},
+        ),
+      );
+      if (response.statusCode == 200) {
+        return chapterStatusModelFromJson(jsonEncode(response.data));
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.response!.data),
+        ),
+      );
+
+      return null;
+    }
+  }
+
+  Future<CurrentStatusModel?> getCurrentChapter(int subjectId, context) async {
+    try {
+      final response = await Dio().post(
+        '${ApiUtils.baseUrl}/status',
+        data: {
+          'subject_id': subjectId,
+        },
+        options: Options(
+          headers: {'Authorization': 'Bearer ${prefs!.getString('token')}'},
+        ),
+      );
+      if (response.statusCode == 200) {
+        return currentStatusModelFromJson(jsonEncode(response.data));
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.response!.data),
+        ),
+      );
+
+      return null;
+    }
+  }
+
+  Future<ChapterStatusModel?> updateChapterIndex(
+      int subjectId, int length, context) async {
     try {
       await Dio()
           .post(
@@ -99,30 +156,31 @@ class SubjectController extends GetxController {
         ),
       )
           .then((value) async {
-        final response = await Dio().post(
-          '${ApiUtils.baseUrl}/status/store',
-          data: {
-            'chapter_no': 1,
-            'subject_id': subjectId,
-          },
-          options: Options(
-            headers: {'Authorization': 'Bearer ${prefs!.getString('token')}'},
-          ),
-        );
-        if (response.statusCode == 200) {
-          return chapterStatusModelFromJson(jsonEncode(response.data));
-        } else {
-          return null;
+        if (int.parse(value.data['satus']['chapter_no']) < length) {
+          final response = await Dio().post(
+            '${ApiUtils.baseUrl}/status/store',
+            data: {
+              'chapter_no': int.parse(value.data['satus']['chapter_no']) + 1,
+              'subject_id': subjectId,
+            },
+            options: Options(
+              headers: {'Authorization': 'Bearer ${prefs!.getString('token')}'},
+            ),
+          );
+
+          if (response.statusCode == 200) {
+            return chapterStatusModelFromJson(jsonEncode(response.data));
+          } else {
+            return null;
+          }
         }
       });
     } on DioError catch (e) {
-      print(e.response!.data);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(e.response!.data),
         ),
       );
-
       return null;
     }
     return null;

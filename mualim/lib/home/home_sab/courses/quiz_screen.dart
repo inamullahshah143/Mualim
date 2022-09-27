@@ -7,11 +7,12 @@ import 'package:mualim/controllers/question_controller.dart';
 import '../../../constants/app_theme.dart';
 
 class QuizScreen extends StatelessWidget {
-  const QuizScreen({Key? key}) : super(key: key);
+  final List sampleData; 
+  const QuizScreen({Key? key, required this.sampleData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    QuestionController questionController = Get.put(QuestionController());
+    QuestionController questionController = Get.put(QuestionController(sampleData:sampleData));
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -52,7 +53,6 @@ class QuizScreen extends StatelessWidget {
             const SizedBox(height: kDefaultPadding),
             Expanded(
               child: PageView.builder(
-                // Block swipe to next qn
                 physics: const NeverScrollableScrollPhysics(),
                 controller: questionController.pageController,
                 onPageChanged: questionController.updateTheQnNum,

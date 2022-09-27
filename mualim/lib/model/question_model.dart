@@ -11,4 +11,3 @@ class Question {
   });
 }
 
-const List sampleData = [];

@@ -28,6 +28,25 @@ class DetailedCourse extends StatefulWidget {
 }
 
 class _DetailedCourseState extends State<DetailedCourse> {
+  int? currentChapter = 0;
+  @override
+  void initState() {
+    subjectController
+        .getCurrentChapter(widget.subjectId, context)
+        .then((value) {
+      if (value != null) {
+        setState(() {
+          currentChapter = int.parse(value.satus.chapterNo);
+        });
+      } else {
+        setState(() {
+          currentChapter = 0;
+        });
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DraggableHome(
@@ -85,38 +104,42 @@ class _DetailedCourseState extends State<DetailedCourse> {
                     color: Colors.white,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 10.0,
-                    horizontal: 20,
-                  ),
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white),
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(AppTheme.primary),
-                      overlayColor: MaterialStateProperty.all<Color>(
-                          AppTheme.white.withOpacity(0.1)),
-                      minimumSize: MaterialStateProperty.all(
-                        Size(MediaQuery.of(context).size.width, 45),
-                      ),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
+                if (currentChapter! < 1)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 10.0,
+                      horizontal: 20,
+                    ),
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.white),
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(AppTheme.primary),
+                        overlayColor: MaterialStateProperty.all<Color>(
+                            AppTheme.white.withOpacity(0.1)),
+                        minimumSize: MaterialStateProperty.all(
+                          Size(MediaQuery.of(context).size.width, 45),
+                        ),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                         ),
                       ),
-                    ),
-                    onPressed: () {
-                      subjectController
-                          .getEnrolledAndUpdate(widget.subjectId, context)
-                          .then((value) {
-                            print(value!.data.position);
+                      onPressed: () {
+                        subjectController
+                            .getEnrolledIntoChapter(widget.subjectId, context)
+                            .then((value) {
+                          setState(() {
+                            currentChapter = value!.data.chapterNo;
                           });
-                    },
-                    child: const Text('Get Started'),
+                        });
+                      },
+                      child: const Text('Get Started'),
+                    ),
                   ),
-                ),
               ],
             ),
           ),
@@ -148,11 +171,13 @@ class _DetailedCourseState extends State<DetailedCourse> {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 15.0, vertical: 2.5),
                   child: MaterialButton(
-                    onPressed: () {
-                      Get.to(LessonScreen(
-                        chapterId: data.subject.chapter[index].id,
-                      ));
-                    },
+                    onPressed: currentChapter! >= index + 1
+                        ? () {
+                            Get.to(LessonScreen(
+                              chapterId: data.subject.chapter[index].id,
+                            ));
+                          }
+                        : () {},
                     elevation: 1.0,
                     color: Colors.white,
                     shape: RoundedRectangleBorder(
@@ -162,8 +187,13 @@ class _DetailedCourseState extends State<DetailedCourse> {
                       contentPadding: EdgeInsets.zero,
                       isThreeLine: true,
                       leading: CircleAvatar(
-                        backgroundColor: AppTheme.appThemeColor,
-                        child: Text("${index + 1}"),
+                        backgroundColor: currentChapter! >= index + 1
+                            ? AppTheme.appThemeColor
+                            : Colors.grey,
+                        child: Text(
+                          "${index + 1}",
+                          style: const TextStyle(color: AppTheme.white),
+                        ),
                       ),
                       title: Text(
                         data.subject.chapter[index].name.toUpperCase(),
