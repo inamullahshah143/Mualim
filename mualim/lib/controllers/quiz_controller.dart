@@ -5,16 +5,17 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mualim/main.dart';
 import 'package:mualim/model/quiz_model.dart';
 import 'package:mualim/utils/api_utils.dart';
 
 class QuizController extends GetxController {
-  Future<QuizModel?> registrationProcess(int chapterId, context) async {
+  Future<QuizModel?> getQuizzes(int chapterId, context) async {
     try {
       final response = await Dio().post(
         '${ApiUtils.baseUrl}/quiz',
         options: Options(
-          headers: {"content-Type": "application/json"},
+          headers: {'Authorization': 'Bearer ${prefs!.getString('token')}'},
         ),
         data: {'chapter_id': chapterId},
       );
@@ -24,9 +25,10 @@ class QuizController extends GetxController {
         return null;
       }
     } on DioError catch (e) {
+      print(e.response.toString());
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(jsonDecode(e.response.toString())['error']),
+          content: Text(e.response.toString()),
         ),
       );
 

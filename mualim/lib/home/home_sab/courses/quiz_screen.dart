@@ -15,13 +15,13 @@ class QuizScreen extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        // Fluttter show the back button automatically
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
           MaterialButton(
-              onPressed: questionController.nextQuestion,
-              child: const Text("Skip")),
+            onPressed: questionController.nextQuestion,
+            child: const Text("Skip"),
+          ),
         ],
       ),
       body: SafeArea(
@@ -57,8 +57,9 @@ class QuizScreen extends StatelessWidget {
                 controller: questionController.pageController,
                 onPageChanged: questionController.updateTheQnNum,
                 itemCount: questionController.questions.length,
-                itemBuilder: (context, index) =>
-                    QuestionCard(question: questionController.questions[index]),
+                itemBuilder: (context, index) => QuestionCard(
+                  question: questionController.questions[index],
+                ),
               ),
             ),
           ],

@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:better_player/better_player.dart';
 import 'package:get/get.dart';
 import 'package:mualim/constants/pdf_view.dart';
-import 'package:mualim/controllers/download_controller.dart';
+import 'package:mualim/controllers/quiz_controller.dart';
 import 'package:mualim/controllers/subject_controller.dart';
 import 'package:mualim/home/home_sab/courses/quiz_screen.dart';
 import 'package:mualim/model/chapter_model.dart';
+import 'package:mualim/model/question_model.dart';
 import 'package:mualim/utils/api_utils.dart';
 import '../../../constants/app_theme.dart';
-
-final subjectController = Get.put(SubjectController());
-
-final downloadController = Get.put(DownloadController());
 
 class LessonScreen extends StatefulWidget {
   final int chapterId;
@@ -34,6 +31,8 @@ class _LessonScreenState extends State<LessonScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final subjectController = Get.put(SubjectController());
+    final quizController = Get.put(QuizController());
     return FutureBuilder<ChapterModel?>(
       future: subjectController.chapterDetails(widget.chapterId, context),
       builder: (context, snapshot) {
@@ -185,7 +184,23 @@ class _LessonScreenState extends State<LessonScreen> {
                         ),
                       ),
                       onPressed: () {
-                        Get.to(const QuizScreen());
+                        quizController
+                            .getQuizzes(widget.chapterId, context)
+                            .then((value) {
+                          for (var element in value!.quiz) {
+                           
+                            sampleData.add(
+                              {
+                                "id": element.id,
+                                "question": element.question,
+                                "options": element.options,
+                                "answer_index": element.correctIndex,
+                              },
+                            );
+                          }
+                        }).whenComplete(() {
+                          Get.to(const QuizScreen());
+                        });
                       },
                       child: const Text('Start Quiz'),
                     ),
