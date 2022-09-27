@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:mualim/constants/pdf_view.dart';
 import 'package:mualim/controllers/download_controller.dart';
 import 'package:mualim/controllers/subject_controller.dart';
+import 'package:mualim/home/home_sab/courses/quiz_screen.dart';
 import 'package:mualim/model/chapter_model.dart';
 import 'package:mualim/utils/api_utils.dart';
 import '../../../constants/app_theme.dart';
@@ -183,7 +184,9 @@ class _LessonScreenState extends State<LessonScreen> {
                           ),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.to(const QuizScreen());
+                      },
                       child: const Text('Start Quiz'),
                     ),
                   ),

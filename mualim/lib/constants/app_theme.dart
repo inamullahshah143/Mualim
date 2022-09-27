@@ -11,3 +11,5 @@ class AppTheme {
   static const red = Colors.red;
   static const transparent = Color.fromARGB(0, 255, 255, 255);
 }
+
+const double kDefaultPadding = 20.0;

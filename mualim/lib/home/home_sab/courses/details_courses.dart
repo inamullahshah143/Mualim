@@ -108,8 +108,11 @@ class _DetailedCourseState extends State<DetailedCourse> {
                       ),
                     ),
                     onPressed: () {
-                      subjectController.getEnrolledAndUpdate(
-                          widget.subjectId, context);
+                      subjectController
+                          .getEnrolledAndUpdate(widget.subjectId, context)
+                          .then((value) {
+                            print(value!.data.position);
+                          });
                     },
                     child: const Text('Get Started'),
                   ),

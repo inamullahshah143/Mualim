@@ -87,8 +87,6 @@ class SubjectController extends GetxController {
 
   Future<ChapterStatusModel?> getEnrolledAndUpdate(
       int subjectId, context) async {
-    int currentPosition;
-
     try {
       await Dio()
           .post(
@@ -101,12 +99,10 @@ class SubjectController extends GetxController {
         ),
       )
           .then((value) async {
-        currentPosition = int.parse(value.data['satus']['chapter_no']);
-
         final response = await Dio().post(
           '${ApiUtils.baseUrl}/status/store',
           data: {
-            'chapter_no': currentPosition+1,
+            'chapter_no': 1,
             'subject_id': subjectId,
           },
           options: Options(
@@ -120,6 +116,7 @@ class SubjectController extends GetxController {
         }
       });
     } on DioError catch (e) {
+      print(e.response!.data);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(e.response!.data),
