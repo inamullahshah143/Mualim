@@ -111,42 +111,45 @@ class _DetailedCourseState extends State<DetailedCourse> {
                       vertical: 10.0,
                       horizontal: 20,
                     ),
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.white),
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(AppTheme.primary),
-                        overlayColor: MaterialStateProperty.all<Color>(
-                            AppTheme.white.withOpacity(0.1)),
-                        minimumSize: MaterialStateProperty.all(
-                          Size(MediaQuery.of(context).size.width, 45),
-                        ),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+                    child: isLoading
+                        ? const CircularProgressIndicator(color: AppTheme.white)
+                        : ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  AppTheme.primary),
+                              overlayColor: MaterialStateProperty.all<Color>(
+                                  AppTheme.white.withOpacity(0.1)),
+                              minimumSize: MaterialStateProperty.all(
+                                Size(MediaQuery.of(context).size.width, 45),
+                              ),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              subjectController
+                                  .getEnrolledIntoChapter(
+                                      widget.subjectId, context)
+                                  .then((value) {
+                                setState(() {
+                                  currentChapter = value!.data.chapterNo;
+                                });
+                              }).whenComplete(() {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                              });
+                            },
+                            child: const Text('Get Started'),
                           ),
-                        ),
-                      ),
-                      onPressed: () {
-                        setState((){
-                          isLoading = true;
-                        });
-                        subjectController
-                            .getEnrolledIntoChapter(widget.subjectId, context)
-                            .then((value) {
-                          setState(() {
-                            currentChapter = value!.data.chapterNo;
-                          });
-                        }).whenComplete((){
-                           setState((){
-                          isLoading = false;
-                        });
-                        });
-                      },
-                      child: isLoading?CircularProgressIndicator(): Text('Get Started'),
-                    ),
                   ),
               ],
             ),

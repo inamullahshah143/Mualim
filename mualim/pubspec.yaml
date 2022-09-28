@@ -51,6 +51,7 @@ dependencies:
   firebase_core: ^1.22.0
   flutter_cached_pdfview: ^0.4.1
   flutter_downloader: ^1.7.1
+  flutter_progress_hud: ^2.0.2
 
 dev_dependencies:
   flutter_test:

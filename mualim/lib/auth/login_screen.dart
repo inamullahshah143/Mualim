@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -189,7 +190,9 @@ class LoginScreen extends StatelessWidget {
                   ),
                   child: ElevatedButton(
                     onPressed: () async {
+                      final progress = ProgressHUD.of(context);
                       if (formKey.currentState!.validate()) {
+                        progress!.show();
                         Map<String, dynamic> data = {
                           "phone": '${number.dialCode}${phoneNo.text}',
                           "password": password.text,
@@ -209,7 +212,9 @@ class LoginScreen extends StatelessWidget {
                               Get.offAll(const MenuDrawer());
                             }
                           },
-                        );
+                        ).whenComplete(() {
+                          progress.dismiss();
+                        });
                       }
                     },
                     style: ButtonStyle(
