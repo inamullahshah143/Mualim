@@ -191,7 +191,7 @@ class LoginScreen extends StatelessWidget {
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
                         Map<String, dynamic> data = {
-                          "phone": '0${phoneNo.text}',
+                          "phone": '${number.dialCode}${phoneNo.text}',
                           "password": password.text,
                         };
                         await loginController.loginProcess(data, context).then(

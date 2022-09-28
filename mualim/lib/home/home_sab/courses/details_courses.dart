@@ -29,6 +29,7 @@ class DetailedCourse extends StatefulWidget {
 
 class _DetailedCourseState extends State<DetailedCourse> {
   int? currentChapter = 0;
+  bool isLoading = false;
   @override
   void initState() {
     subjectController
@@ -129,15 +130,22 @@ class _DetailedCourseState extends State<DetailedCourse> {
                         ),
                       ),
                       onPressed: () {
+                        setState((){
+                          isLoading = true;
+                        });
                         subjectController
                             .getEnrolledIntoChapter(widget.subjectId, context)
                             .then((value) {
                           setState(() {
                             currentChapter = value!.data.chapterNo;
                           });
+                        }).whenComplete((){
+                           setState((){
+                          isLoading = false;
+                        });
                         });
                       },
-                      child: const Text('Get Started'),
+                      child: isLoading?CircularProgressIndicator(): Text('Get Started'),
                     ),
                   ),
               ],

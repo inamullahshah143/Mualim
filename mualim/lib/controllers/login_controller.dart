@@ -24,7 +24,7 @@ class LoginController extends GetxController {
     } on DioError catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(e.response!.data),
+          content: Text(e.response!.data['message'].toString()),
         ),
       );
 
