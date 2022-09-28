@@ -150,6 +150,7 @@ class _OTPScreenState extends State<OTPScreen> {
                   fieldStyle: FieldStyle.box,
                   onCompleted: (pin) async {
                     try {
+                      processLoading(context);
                       await FirebaseAuth.instance
                           .signInWithCredential(PhoneAuthProvider.credential(
                               verificationId: _verificationCode!, smsCode: pin))
@@ -173,6 +174,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                       content: Text("User Login Successfully"),
                                     ),
                                   );
+                                  Navigator.of(context).pop();
                                   Get.offAll(const MenuDrawer());
                                 }
                               },
@@ -183,6 +185,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                 .then(
                               (response) {
                                 if (response!.status == 201) {
+                                  prefs!.setBool('isLogin', true);
                                   prefs!.setString(
                                       'username', response.data.name);
                                   prefs!
@@ -196,6 +199,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                           Text("User Register Successfully"),
                                     ),
                                   );
+                                  Navigator.of(context).pop();
                                   Get.offAll(const MenuDrawer());
                                 }
                               },
@@ -204,6 +208,7 @@ class _OTPScreenState extends State<OTPScreen> {
                         }
                       });
                     } catch (e) {
+                      Navigator.of(context).pop();
                       ScaffoldMessenger.of(context)
                           .showSnackBar(SnackBar(content: Text(e.toString())));
                     }
@@ -281,6 +286,7 @@ class _OTPScreenState extends State<OTPScreen> {
   }
 
   _verifyPhone() async {
+    processLoading(context);
     await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: widget.data['phone'],
         verificationCompleted: (PhoneAuthCredential credential) async {
@@ -292,6 +298,7 @@ class _OTPScreenState extends State<OTPScreen> {
                 await loginController.loginProcess(widget.data, context).then(
                   (response) {
                     if (response!.success == 'successfully login') {
+                      prefs!.setBool('isLogin', true);
                       prefs!.setString('username', response.user.name);
                       prefs!.setString('email', response.user.email);
                       prefs!.setString('phone', response.user.phone);
@@ -301,6 +308,7 @@ class _OTPScreenState extends State<OTPScreen> {
                           content: Text("User Login Successfully"),
                         ),
                       );
+                      Navigator.of(context).pop();
                       Get.offAll(const MenuDrawer());
                     }
                   },
@@ -311,6 +319,7 @@ class _OTPScreenState extends State<OTPScreen> {
                     .then(
                   (response) {
                     if (response!.status == 201) {
+                      prefs!.setBool('isLogin', true);
                       prefs!.setString('username', response.data.name);
                       prefs!.setString('email', response.data.email);
                       prefs!.setString('phone', response.data.phone);
@@ -320,6 +329,7 @@ class _OTPScreenState extends State<OTPScreen> {
                           content: Text("User Register Successfully"),
                         ),
                       );
+                      Navigator.of(context).pop();
                       Get.offAll(const MenuDrawer());
                     }
                   },
@@ -329,6 +339,7 @@ class _OTPScreenState extends State<OTPScreen> {
           });
         },
         verificationFailed: (FirebaseAuthException e) {
+          Navigator.of(context).pop();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(e.message.toString()),

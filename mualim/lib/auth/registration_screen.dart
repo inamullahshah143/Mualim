@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:mualim/auth/otp_screen.dart';
@@ -511,9 +510,8 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
                 child: ElevatedButton(
                   onPressed: () async {
-                    final progress = ProgressHUD.of(context);
+                    processLoading(context);
                     if (formKey.currentState!.validate()) {
-                      progress!.show();
                       Map<String, dynamic> data = {
                         "name": fullName.text,
                         "email": email.text,
@@ -527,11 +525,11 @@ class _SignupScreenState extends State<SignupScreen> {
                         "phone": number.dialCode.toString() +
                             phoneNo.text.toString(),
                       };
+                      Navigator.of(context).pop();
                       Get.to(OTPScreen(
                         data: data,
                         isLogin: false,
                       ));
-                      progress.dismiss();
                     }
                   },
                   style: ButtonStyle(

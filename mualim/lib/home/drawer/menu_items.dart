@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:get/get.dart';
+import 'package:mualim/auth/onboard_screen.dart';
 import 'package:mualim/constants/app_theme.dart';
+import 'package:mualim/controllers/login_controller.dart';
 import 'package:mualim/main.dart';
 
 class MenuItems extends StatelessWidget {
@@ -8,6 +11,7 @@ class MenuItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loginController = Get.put(LoginController());
     return Scaffold(
       backgroundColor: AppTheme.placeholder,
       body: Column(
@@ -98,7 +102,12 @@ class MenuItems extends StatelessWidget {
               ),
               ListTile(
                 onTap: () {
-                  ZoomDrawer.of(context)!.close();
+                  processLoading(context);
+                  loginController.logoutProcess(context).whenComplete(() {
+                    prefs!.clear();
+                    ZoomDrawer.of(context)!.close();
+                    Get.offAll(const OnboardScreen());
+                  });
                 },
                 leading: const Icon(
                   Icons.logout_outlined,

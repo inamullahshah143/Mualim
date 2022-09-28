@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mualim/auth/login_screen.dart';
 import 'package:mualim/constants/app_theme.dart';
+import 'package:mualim/home/drawer/menu_drawer.dart';
+import 'package:mualim/main.dart';
 
 class OnboardScreen extends StatefulWidget {
   const OnboardScreen({Key? key}) : super(key: key);
@@ -78,7 +80,10 @@ class _OnboardScreenState extends State<OnboardScreen> {
             ),
           ),
           onPressed: () {
-            Get.offAll(() => LoginScreen());
+            bool login = prefs!.getBool('isLogin') == null ? false : true;
+            login
+                ? Get.offAll(() => const MenuDrawer())
+                : Get.offAll(() => LoginScreen());
           },
           child: const Text('Get Started'),
         ),

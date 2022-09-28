@@ -3,7 +3,6 @@ import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:mualim/constants/app_theme.dart';
 import 'package:mualim/home/home_sab/all_courses.dart';
 import 'package:mualim/home/home_sab/saved_courses.dart';
-import 'package:mualim/home/home_sab/studying_courses.dart';
 import 'package:mualim/main.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -38,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: DefaultTabController(
-        length: 3,
+        length: 2,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -94,7 +93,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 tabs: const [
                   Tab(text: 'ALL'),
-                  Tab(text: 'STUDYING'),
                   Tab(text: 'SAVED'),
                 ],
               ),
@@ -103,7 +101,6 @@ class _HomeScreenState extends State<HomeScreen> {
               child: TabBarView(
                 children: [
                   AllCourses(),
-                  StudyingCourses(),
                   SavedCourses(),
                 ],
               ),

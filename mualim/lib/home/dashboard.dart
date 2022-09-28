@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:mualim/constants/app_theme.dart';
-import 'package:mualim/home/favorites_screen.dart';
 import 'package:mualim/home/home_screen.dart';
 import 'package:mualim/home/profile_screen.dart';
 import 'package:mualim/home/search_screen.dart';
@@ -27,11 +26,9 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       body: _selectedIndex == 0
           ? const HomeScreen()
-          : _selectedIndex == 1
-              ? const FavoritesScreen()
-              : _selectedIndex == 2
+              : _selectedIndex == 1
                   ? const SearchScreen()
-                  : _selectedIndex == 3
+                  : _selectedIndex == 2
                       ? const ProfileScreen()
                       : Container(),
       bottomNavigationBar: Padding(
@@ -62,10 +59,6 @@ class _DashboardState extends State<Dashboard> {
             GButton(
               icon: LineIcons.home,
               text: 'Home',
-            ),
-            GButton(
-              icon: LineIcons.heart,
-              text: 'Likes',
             ),
             GButton(
               icon: LineIcons.search,

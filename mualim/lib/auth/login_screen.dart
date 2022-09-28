@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
-import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:mualim/auth/registration_screen.dart';
@@ -190,9 +188,8 @@ class LoginScreen extends StatelessWidget {
                   ),
                   child: ElevatedButton(
                     onPressed: () async {
-                      final progress = ProgressHUD.of(context);
                       if (formKey.currentState!.validate()) {
-                        progress!.show();
+                        processLoading(context);
                         Map<String, dynamic> data = {
                           "phone": '${number.dialCode}${phoneNo.text}',
                           "password": password.text,
@@ -200,6 +197,7 @@ class LoginScreen extends StatelessWidget {
                         await loginController.loginProcess(data, context).then(
                           (response) {
                             if (response!.success == 'successfully login') {
+                              prefs!.setBool('isLogin', true);
                               prefs!.setString('username', response.user.name);
                               prefs!.setString('email', response.user.email);
                               prefs!.setString('phone', response.user.phone);
@@ -209,12 +207,12 @@ class LoginScreen extends StatelessWidget {
                                   content: Text("User Login Successfully"),
                                 ),
                               );
+
+                              Navigator.of(context).pop();
                               Get.offAll(const MenuDrawer());
                             }
                           },
-                        ).whenComplete(() {
-                          progress.dismiss();
-                        });
+                        );
                       }
                     },
                     style: ButtonStyle(
@@ -267,67 +265,67 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 5.0,
-                    horizontal: 20,
-                  ),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'OR',
-                      style: TextStyle(
-                        color: AppTheme.fonts.withOpacity(0.5),
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 5.0,
-                    horizontal: 20,
-                  ),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Get.offAll(() => const MenuDrawer());
-                    },
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.transparent),
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(AppTheme.primary),
-                      overlayColor: MaterialStateProperty.all<Color>(
-                          AppTheme.primary.withOpacity(0.1)),
-                      minimumSize: MaterialStateProperty.all(
-                        Size(MediaQuery.of(context).size.width, 45),
-                      ),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          side: const BorderSide(color: AppTheme.primary),
-                        ),
-                      ),
-                    ),
-                    child: RichText(
-                      text: const TextSpan(
-                        children: [
-                          WidgetSpan(
-                            alignment: PlaceholderAlignment.middle,
-                            child: Icon(
-                              FontAwesome.google,
-                            ),
-                          ),
-                          TextSpan(text: '  '),
-                          WidgetSpan(
-                            alignment: PlaceholderAlignment.middle,
-                            child: Text('Sign In with Google'),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(
+                //     vertical: 5.0,
+                //     horizontal: 20,
+                //   ),
+                //   child: Align(
+                //     alignment: Alignment.center,
+                //     child: Text(
+                //       'OR',
+                //       style: TextStyle(
+                //         color: AppTheme.fonts.withOpacity(0.5),
+                //         fontSize: 14,
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(
+                //     vertical: 5.0,
+                //     horizontal: 20,
+                //   ),
+                //   child: ElevatedButton(
+                //     onPressed: () {
+                //       Get.offAll(() => const MenuDrawer());
+                //     },
+                //     style: ButtonStyle(
+                //       backgroundColor:
+                //           MaterialStateProperty.all<Color>(Colors.transparent),
+                //       foregroundColor:
+                //           MaterialStateProperty.all<Color>(AppTheme.primary),
+                //       overlayColor: MaterialStateProperty.all<Color>(
+                //           AppTheme.primary.withOpacity(0.1)),
+                //       minimumSize: MaterialStateProperty.all(
+                //         Size(MediaQuery.of(context).size.width, 45),
+                //       ),
+                //       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                //         RoundedRectangleBorder(
+                //           borderRadius: BorderRadius.circular(10.0),
+                //           side: const BorderSide(color: AppTheme.primary),
+                //         ),
+                //       ),
+                //     ),
+                //     child: RichText(
+                //       text: const TextSpan(
+                //         children: [
+                //           WidgetSpan(
+                //             alignment: PlaceholderAlignment.middle,
+                //             child: Icon(
+                //               FontAwesome.google,
+                //             ),
+                //           ),
+                //           TextSpan(text: '  '),
+                //           WidgetSpan(
+                //             alignment: PlaceholderAlignment.middle,
+                //             child: Text('Sign In with Google'),
+                //           )
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

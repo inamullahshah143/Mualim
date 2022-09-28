@@ -12,13 +12,14 @@ class ProgressBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 35,
+      height: 30,
+      clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFF3F4768), width: 3),
+        border: Border.all(color: AppTheme.primary, width: 2),
         borderRadius: BorderRadius.circular(50),
       ),
       child: GetBuilder<QuestionController>(
-        init: QuestionController(),
+        init: QuestionController(context: context),
         builder: (controller) {
           return Stack(
             children: [
@@ -35,7 +36,10 @@ class ProgressBar extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("${(controller.animation.value * 60).round()} sec"),
+                    Text(
+                      "${(controller.animation.value * 60).round()} sec",
+                      style: const TextStyle(color: AppTheme.white),
+                    ),
                   ],
                 ),
               ),

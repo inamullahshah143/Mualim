@@ -13,3 +13,25 @@ class AppTheme {
 }
 
 const double kDefaultPadding = 20.0;
+
+processLoading(BuildContext context) {
+  Dialog alert = Dialog(
+    elevation: 0,
+    backgroundColor: Colors.transparent,
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: const [
+        CircularProgressIndicator(
+          color: AppTheme.white,
+        ),
+      ],
+    ),
+  );
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}

@@ -1,8 +1,8 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mualim/home/home_sab/courses/score_screen.dart';
+import 'package:mualim/controllers/subject_controller.dart';
 import 'package:mualim/model/question_model.dart';
 
 // We use get package for our state management
@@ -10,7 +10,8 @@ import 'package:mualim/model/question_model.dart';
 class QuestionController extends GetxController
     with SingleGetTickerProviderMixin {
   List? sampleData;
-  QuestionController( {this.sampleData});
+  final BuildContext context;
+  QuestionController({this.sampleData, required this.context});
   // Lets animated our progress bar
 
   AnimationController? _animationController;
@@ -20,7 +21,6 @@ class QuestionController extends GetxController
 
   PageController? _pageController;
   PageController get pageController => _pageController!;
-
   bool _isAnswered = false;
   bool get isAnswered => _isAnswered;
 
@@ -38,6 +38,8 @@ class QuestionController extends GetxController
   int get numOfCorrectAns => _numOfCorrectAns;
   List<Question>? _questions = [];
   List<Question> get questions => _questions!;
+
+  final subjectController = Get.put(SubjectController());
   @override
   void onInit() {
     _questions = sampleData!
@@ -95,8 +97,30 @@ class QuestionController extends GetxController
       // Once timer is finish go to the next qn
       _animationController!.forward().whenComplete(nextQuestion);
     } else {
-      // Get package provide us simple way to naviigate another page
-      Get.to(const ScoreScreen());
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Center(
+              child: Text('Your score is:'),
+            ),
+            content: Center(
+              child: Text('${correctAns * 10}/${questions.length * 10}'),
+            ),
+            actions: [
+              MaterialButton(
+                onPressed: () {
+                  subjectController.updateChapterIndex(1, 3, context);
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Proceed'),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 

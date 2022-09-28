@@ -17,7 +17,7 @@ class Option extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<QuestionController>(
-        init: QuestionController(),
+        init: QuestionController(context: context),
         builder: (qnController) {
           Color getTheRightColor() {
             if (qnController.isAnswered) {

@@ -6,15 +6,19 @@ import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:mualim/controllers/download_controller.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 final downloadController = Get.put(DownloadController());
 
 class Reader extends StatefulWidget {
   final String title;
   final String file;
+  final bool isFromPath;
 
-  const Reader({Key? key, required this.title, required this.file})
+  const Reader(
+      {Key? key,
+      required this.title,
+      required this.file,
+      required this.isFromPath})
       : super(key: key);
 
   @override
@@ -58,8 +62,6 @@ class _ReaderState extends State<Reader> {
           dStatus = 'Canceled';
         });
       }
-      // print(progress);
-      // print(dStatus);
       setState(() {});
     });
 
@@ -69,14 +71,11 @@ class _ReaderState extends State<Reader> {
   }
 
   createFolder() async {
-    var status = await Permission.storage.request();
-    if (status.isGranted) {
-      const folderName = 'Mualim';
-      final path = Directory('/storage/emulated/0/Download/$folderName');
-      if ((await path.exists())) {
-      } else {
-        path.create();
-      }
+    const folderName = 'Mualim';
+    final path = Directory('/storage/emulated/0/Download/$folderName');
+    if ((await path.exists())) {
+    } else {
+      path.create();
     }
   }
 
@@ -108,43 +107,47 @@ class _ReaderState extends State<Reader> {
             style: const TextStyle(color: Colors.black, fontSize: 16),
           ),
           actions: [
-            IconButton(
-              color: Colors.black,
-              onPressed: dStatus == 'Complete'
-                  ? null
-                  : dStatus == 'Running'
-                      ? null
-                      : dStatus == 'Canceled'
-                          ? () {
-                              downloadController.downloadFile(widget.file);
-                            }
-                          : () {
-                              downloadController.downloadFile(widget.file);
-                            },
-              icon: dStatus == 'Complete'
-                  ? const Icon(
-                      Icons.download_done_rounded,
-                      color: Colors.green,
-                    )
-                  : dStatus == 'Failed'
-                      ? const Icon(
-                          Icons.warning_rounded,
-                          color: Colors.yellow,
-                        )
-                      : dStatus == 'Canceled'
-                          ? const Icon(
-                              Icons.download_rounded,
-                              color: Colors.black,
-                            )
-                          : dStatus == 'Running'
-                              ? Text(
-                                  "$progress%",
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              : const Icon(Icons.download_rounded),
-            ),
+            !widget.isFromPath
+                ? IconButton(
+                    color: Colors.black,
+                    onPressed: dStatus == 'Complete'
+                        ? null
+                        : dStatus == 'Running'
+                            ? null
+                            : dStatus == 'Canceled'
+                                ? () {
+                                    downloadController
+                                        .downloadFile(widget.file);
+                                  }
+                                : () {
+                                    downloadController
+                                        .downloadFile(widget.file);
+                                  },
+                    icon: dStatus == 'Complete'
+                        ? const Icon(
+                            Icons.download_done_rounded,
+                            color: Colors.green,
+                          )
+                        : dStatus == 'Failed'
+                            ? const Icon(
+                                Icons.warning_rounded,
+                                color: Colors.yellow,
+                              )
+                            : dStatus == 'Canceled'
+                                ? const Icon(
+                                    Icons.download_rounded,
+                                    color: Colors.black,
+                                  )
+                                : dStatus == 'Running'
+                                    ? Text(
+                                        "$progress%",
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    : const Icon(Icons.download_rounded),
+                  )
+                : Container(),
           ],
           leading: IconButton(
             onPressed: () {
@@ -157,16 +160,23 @@ class _ReaderState extends State<Reader> {
           ),
         ),
         body: Center(
-          child: const PDF(enableSwipe: true).fromUrl(
-            widget.file,
-            placeholder: (progress) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            },
-            errorWidget: (error) => Center(child: Text(error.toString())),
-          ),
-        ),
+            child: widget.isFromPath
+                ? const PDF(enableSwipe: true).fromPath(
+                    widget.file,
+                  )
+                : const PDF(enableSwipe: true).fromUrl(
+                    widget.file,
+                    placeholder: (progress) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    },
+                    errorWidget: (error) => Center(
+                      child: Text(
+                        error.toString(),
+                      ),
+                    ),
+                  )),
       ),
     );
   }
