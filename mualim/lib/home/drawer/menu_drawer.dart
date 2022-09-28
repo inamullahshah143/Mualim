@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/config.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:mualim/constants/app_theme.dart';
-import 'package:mualim/home/home_screen.dart';
+import 'package:mualim/home/dashboard.dart';
 
 import 'menu_items.dart';
 
@@ -30,7 +30,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
       angle: 0.0,
       slideWidth: MediaQuery.of(context).size.width * 0.65,
       menuScreenWidth: MediaQuery.of(context).size.width * 0.75,
-      mainScreen: const HomeScreen(),
+      mainScreen: const Dashboard(),
       menuScreen: const MenuItems(),
       style: DrawerStyle.defaultStyle,
       moveMenuScreen: true,

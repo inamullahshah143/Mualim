@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:mualim/constants/app_theme.dart';
 import 'package:mualim/home/home_sab/all_courses.dart';
 import 'package:mualim/home/home_sab/saved_courses.dart';
@@ -17,7 +15,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   TabController? tabController;
-  int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,9 +23,6 @@ class _HomeScreenState extends State<HomeScreen> {
         automaticallyImplyLeading: true,
         backgroundColor: AppTheme.transparent,
         foregroundColor: AppTheme.fonts,
-        // actions: [
-        //   IconButton(onPressed: () {}, icon: const Icon(LineIcons.bell)),
-        // ],
         leading: IconButton(
           onPressed: () {
             if (ZoomDrawer.of(context)!.isOpen()) {
@@ -115,61 +109,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             )
           ],
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: GNav(
-          tabActiveBorder: const Border(
-            bottom: BorderSide(
-              color: AppTheme.primary,
-            ),
-            top: BorderSide(
-              color: AppTheme.primary,
-            ),
-            left: BorderSide(
-              color: AppTheme.primary,
-            ),
-            right: BorderSide(
-              color: AppTheme.primary,
-            ),
-          ),
-          tabBorderRadius: 15,
-          gap: 8,
-          activeColor: AppTheme.primary,
-          iconSize: 24,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          duration: const Duration(milliseconds: 400),
-          color: Colors.black,
-          tabs: const [
-            GButton(
-              icon: LineIcons.home,
-              text: 'Home',
-            ),
-            GButton(
-              icon: LineIcons.heart,
-              text: 'Likes',
-            ),
-            GButton(
-              icon: LineIcons.search,
-              text: 'Search',
-            ),
-            GButton(
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    'https://1.bp.blogspot.com/-ytMsk6NJCIc/YRDL86N7-CI/AAAAAAAAM_Q/3VFXo2IqsmMxqKbZYlERxjcLX7uA1L67QCLcBGAsYHQ/s500/unique-boys-whatsapp-dp-images-boys-dpz-dp-for-boys-profile-pictures-for-Boys%2B%25281%2529.jpg'),
-                radius: 18,
-              ),
-              icon: LineIcons.user,
-              text: 'Profile',
-            ),
-          ],
-          selectedIndex: _selectedIndex,
-          onTabChange: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
         ),
       ),
     );
