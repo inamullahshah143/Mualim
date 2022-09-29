@@ -207,7 +207,6 @@ class LoginScreen extends StatelessWidget {
                                   content: Text("User Login Successfully"),
                                 ),
                               );
-
                               Navigator.of(context).pop();
                               Get.offAll(const MenuDrawer());
                             }

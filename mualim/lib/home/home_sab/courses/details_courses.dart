@@ -190,6 +190,7 @@ class _DetailedCourseState extends State<DetailedCourse> {
                         ? () {
                             Get.to(LessonScreen(
                               chapterId: data.subject.chapter[index].id,
+                              subjectId: widget.subjectId,
                             ));
                           }
                         : () {},

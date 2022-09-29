@@ -141,12 +141,12 @@ class SubjectController extends GetxController {
     }
   }
 
-  Future<ChapterStatusModel?> updateChapterIndex(
-      int subjectId, int length, context) async {
+  Future<ChapterStatusModel?> updateChapterIndex(int subjectId, context) async {
+    int length = 0;
     try {
       await Dio()
           .post(
-        '${ApiUtils.baseUrl}/status',
+        '${ApiUtils.baseUrl}/subjects',
         data: {
           'subject_id': subjectId,
         },
@@ -155,24 +155,52 @@ class SubjectController extends GetxController {
         ),
       )
           .then((value) async {
-        if (int.parse(value.data['satus']['chapter_no']) < length) {
-          final response = await Dio().post(
-            '${ApiUtils.baseUrl}/status/store',
-            data: {
-              'chapter_no': int.parse(value.data['satus']['chapter_no']) + 1,
-              'subject_id': subjectId,
-            },
-            options: Options(
-              headers: {'Authorization': 'Bearer ${prefs!.getString('token')}'},
-            ),
-          );
+        length = value.data['subject']['chapter'].length;
+      }).whenComplete(() async {
+        await Dio()
+            .post(
+          '${ApiUtils.baseUrl}/status',
+          data: {
+            'subject_id': subjectId,
+          },
+          options: Options(
+            headers: {'Authorization': 'Bearer ${prefs!.getString('token')}'},
+          ),
+        )
+            .then((value) async {
+          if (int.parse(value.data['satus']['chapter_no']) < length) {
+            final response = await Dio().post(
+              '${ApiUtils.baseUrl}/status/store',
+              data: {
+                'chapter_no': int.parse(value.data['satus']['chapter_no']) + 1,
+                'subject_id': subjectId,
+              },
+              options: Options(
+                headers: {
+                  'Authorization': 'Bearer ${prefs!.getString('token')}'
+                },
+              ),
+            );
 
-          if (response.statusCode == 200) {
-            return chapterStatusModelFromJson(jsonEncode(response.data));
-          } else {
-            return null;
+            if (response.statusCode == 200) {
+              return chapterStatusModelFromJson(jsonEncode(response.data));
+            } else {
+              return null;
+            }
           }
-        }
+        }).whenComplete(() async {
+          await Dio()
+            .post(
+          '${ApiUtils.baseUrl}/status',
+          data: {
+            'subject_id': subjectId,
+          },
+          options: Options(
+            headers: {'Authorization': 'Bearer ${prefs!.getString('token')}'},
+          ),
+        )
+            .then((value) async {});
+        });
       });
     } on DioError catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

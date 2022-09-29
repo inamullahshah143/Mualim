@@ -13,8 +13,10 @@ import '../../../constants/app_theme.dart';
 
 class LessonScreen extends StatefulWidget {
   final int chapterId;
-
-  const LessonScreen({Key? key, required this.chapterId}) : super(key: key);
+  final int subjectId;
+  const LessonScreen(
+      {Key? key, required this.chapterId, required this.subjectId})
+      : super(key: key);
 
   @override
   State<LessonScreen> createState() => _LessonScreenState();
@@ -375,7 +377,10 @@ class _LessonScreenState extends State<LessonScreen> {
                           );
                         }
                       }).whenComplete(() {
-                        Get.to(QuizScreen(sampleData: sampleData));
+                        Get.to(QuizScreen(
+                          sampleData: sampleData,
+                          subjectId: widget.subjectId,
+                        ));
                       });
                     },
                     child: const Text('Start Quiz'),

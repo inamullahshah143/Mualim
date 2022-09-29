@@ -8,12 +8,13 @@ import '../../../constants/app_theme.dart';
 
 class QuizScreen extends StatelessWidget {
   final List sampleData;
-  const QuizScreen({Key? key, required this.sampleData}) : super(key: key);
+  final int subjectId;
+  const QuizScreen({Key? key, required this.sampleData, required this.subjectId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     QuestionController questionController =
-        Get.put(QuestionController(sampleData: sampleData, context: context));
+        Get.put(QuestionController(sampleData: sampleData, subjectId:subjectId, context: context));
     return Scaffold(
       body: SafeArea(
         child: Padding(

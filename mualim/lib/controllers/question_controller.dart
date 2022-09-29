@@ -9,9 +9,10 @@ import 'package:mualim/model/question_model.dart';
 
 class QuestionController extends GetxController
     with SingleGetTickerProviderMixin {
+  int? subjectId;
   List? sampleData;
   final BuildContext context;
-  QuestionController({this.sampleData, required this.context});
+  QuestionController({this.sampleData, this.subjectId, required this.context});
   // Lets animated our progress bar
 
   AnimationController? _animationController;
@@ -89,12 +90,7 @@ class QuestionController extends GetxController
       _isAnswered = false;
       _pageController!.nextPage(
           duration: const Duration(milliseconds: 250), curve: Curves.ease);
-
-      // Reset the counter
       _animationController!.reset();
-
-      // Then start it again
-      // Once timer is finish go to the next qn
       _animationController!.forward().whenComplete(nextQuestion);
     } else {
       showDialog(
@@ -108,7 +104,7 @@ class QuestionController extends GetxController
             actions: [
               MaterialButton(
                 onPressed: () {
-                  subjectController.updateChapterIndex(1, 3, context);
+                  subjectController.updateChapterIndex(subjectId!, context);
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
