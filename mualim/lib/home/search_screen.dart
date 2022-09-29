@@ -4,12 +4,18 @@ import 'package:mualim/constants/app_theme.dart';
 import 'package:mualim/controllers/search_controller.dart';
 import 'package:mualim/model/search_model.dart';
 
-class SearchScreen extends StatelessWidget {
+class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
 
   @override
+  State<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  @override
   Widget build(BuildContext context) {
     final searchController = Get.put(SearchController());
+    final searchKey = ''.obs;
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -22,7 +28,9 @@ class SearchScreen extends StatelessWidget {
               ),
               child: TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                onChanged: (value) {},
+                onChanged: (value) {
+                  searchKey.value = value;
+                },
                 decoration: InputDecoration(
                   isDense: true,
                   filled: true,
@@ -45,95 +53,58 @@ class SearchScreen extends StatelessWidget {
               endIndent: 25,
               indent: 25,
             ),
-            FutureBuilder<SearchModel?>(
-              future:
-                  searchController.searchChapters('', context),
-              builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.waiting:
-                    return const Expanded(
-                      child: CircularProgressIndicator(),
-                    );
-                  default:
-                    if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      final data = snapshot.data;
-                      return ListView.builder(
-                        padding: const EdgeInsets.only(top: 0),
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: data!.,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) => Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 2.5),
-                          child: ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            isThreeLine: true,
-                            leading: CircleAvatar(
-                              backgroundColor: AppTheme.appThemeColor,
-                              child: Text(
-                                "${index + 1}",
-                                style: const TextStyle(color: AppTheme.white),
+            Obx(() {
+              return FutureBuilder<SearchModel?>(
+                future: searchController.searchChapters(searchKey, context),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      return const CircularProgressIndicator();
+                    default:
+                      if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        final data = snapshot.data!;
+                        return ListView.builder(
+                          padding: const EdgeInsets.only(top: 0),
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: data.chapter.length,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) => Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15.0, vertical: 2.5),
+                            child: ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              isThreeLine: true,
+                              leading: CircleAvatar(
+                                backgroundColor: AppTheme.appThemeColor,
+                                child: Text(
+                                  "${index + 1}",
+                                  style: const TextStyle(color: AppTheme.white),
+                                ),
+                              ),
+                              title: Text(
+                                data.chapter[index].name.toUpperCase(),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              subtitle: Text(
+                                data.chapter[index].description,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              trailing: IconButton(
+                                icon: const Icon(Icons.play_arrow_rounded),
+                                onPressed: () {},
                               ),
                             ),
-                            title: Text(
-                              data.subject.chapter[index].name.toUpperCase(),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            subtitle: Text(
-                              data.subject.chapter[index].description,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.play_arrow_rounded),
-                              onPressed: () {},
-                            ),
                           ),
-                        ),
-                      );
-                    }
-                }
-              },
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: 3,
-              itemBuilder: ((context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 15.0, vertical: 2.5),
-                  child: MaterialButton(
-                    onPressed: () {},
-                    elevation: 1.0,
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      isThreeLine: true,
-                      title: const Text(
-                        'Chapter Title',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      subtitle: const Text(
-                        'Details screen',
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.play_arrow_rounded),
-                        onPressed: () {},
-                      ),
-                    ),
-                  ),
-                );
-              }),
-            ),
+                        );
+                      }
+                  }
+                },
+              );
+            }),
           ],
         ),
       ),

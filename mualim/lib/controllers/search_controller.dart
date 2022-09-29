@@ -8,7 +8,7 @@ import 'package:mualim/model/search_model.dart';
 import 'package:mualim/utils/api_utils.dart';
 
 class SearchController extends GetxController {
-  Future<SearchModel?> searchChapters(String searchKey, context) async {
+  Future<SearchModel?> searchChapters(searchKey, context) async {
     try {
       final response = await Dio().post(
         '${ApiUtils.baseUrl}/search',
@@ -16,13 +16,11 @@ class SearchController extends GetxController {
           headers: {'Authorization': 'Bearer ${prefs!.getString('token')}'},
         ),
         data: {
-          'name': searchKey,
+          'name': searchKey.toString(),
         },
       );
       if (response.statusCode == 200) {
         return searchModelFromJson(jsonEncode(response.data));
-      } else {
-        return null;
       }
     } on DioError catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -30,7 +28,7 @@ class SearchController extends GetxController {
           content: Text(e.response!.data.toString()),
         ),
       );
-      return null;
     }
+    return null;
   }
 }

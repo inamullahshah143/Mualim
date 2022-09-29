@@ -165,8 +165,12 @@ class _DetailedCourseState extends State<DetailedCourse> {
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
-            return const Expanded(
-              child: CircularProgressIndicator(),
+            return Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                CircularProgressIndicator(),
+              ],
             );
           default:
             if (snapshot.hasError) {

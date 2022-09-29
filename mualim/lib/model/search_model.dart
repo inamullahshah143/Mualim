@@ -11,22 +11,23 @@ String searchModelToJson(SearchModel data) => json.encode(data.toJson());
 
 class SearchModel {
   SearchModel({
-    required this.subject,
+    required this.chapter,
   });
 
-  Subject subject;
+  List<Chapter> chapter;
 
   factory SearchModel.fromJson(Map<String, dynamic> json) => SearchModel(
-        subject: Subject.fromJson(json["subject"]),
+        chapter:
+            List<Chapter>.from(json["chapter"].map((x) => Chapter.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "subject": subject.toJson(),
+        "chapter": List<dynamic>.from(chapter.map((x) => x.toJson())),
       };
 }
 
-class Subject {
-  Subject({
+class Chapter {
+  Chapter({
     required this.id,
     required this.name,
     required this.description,
@@ -34,9 +35,7 @@ class Subject {
     required this.createdAt,
     required this.updatedAt,
     required this.chapterNo,
-    required this.videos,
-    required this.files,
-    required this.quizzes,
+    required this.content,
   });
 
   int id;
@@ -46,11 +45,9 @@ class Subject {
   DateTime createdAt;
   DateTime updatedAt;
   int chapterNo;
-  List<String> videos;
-  List<String> files;
-  List<Quiz> quizzes;
+  List<Content> content;
 
-  factory Subject.fromJson(Map<String, dynamic> json) => Subject(
+  factory Chapter.fromJson(Map<String, dynamic> json) => Chapter(
         id: json["id"],
         name: json["name"],
         description: json["description"],
@@ -58,9 +55,8 @@ class Subject {
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         chapterNo: json["chapter_no"],
-        videos: List<String>.from(json["videos"].map((x) => x)),
-        files: List<String>.from(json["files"].map((x) => x)),
-        quizzes: List<Quiz>.from(json["quizzes"].map((x) => Quiz.fromJson(x))),
+        content:
+            List<Content>.from(json["content"].map((x) => Content.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -71,52 +67,42 @@ class Subject {
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
         "chapter_no": chapterNo,
-        "videos": List<dynamic>.from(videos.map((x) => x)),
-        "files": List<dynamic>.from(files.map((x) => x)),
-        "quizzes": List<dynamic>.from(quizzes.map((x) => x.toJson())),
+        "content": List<dynamic>.from(content.map((x) => x.toJson())),
       };
 }
 
-class Quiz {
-  Quiz({
+class Content {
+  Content({
     required this.id,
-    required this.question,
-    required this.details,
+    required this.video,
+    required this.file,
     required this.chapterId,
     required this.createdAt,
     required this.updatedAt,
-    required this.options,
-    required this.correctIndex,
   });
 
   int id;
-  String question;
-  String details;
+  String video;
+  String file;
   int chapterId;
   DateTime createdAt;
   DateTime updatedAt;
-  List<String> options;
-  int correctIndex;
 
-  factory Quiz.fromJson(Map<String, dynamic> json) => Quiz(
+  factory Content.fromJson(Map<String, dynamic> json) => Content(
         id: json["id"],
-        question: json["question"],
-        details: json["details"],
+        video: json["video"].toString(),
+        file: json["file"].toString(),
         chapterId: json["chapter_id"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
-        options: List<String>.from(json["options"].map((x) => x)),
-        correctIndex: json["correctIndex"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "question": question,
-        "details": details,
+        "video": video,
+        "file": file,
         "chapter_id": chapterId,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
-        "options": List<dynamic>.from(options.map((x) => x)),
-        "correctIndex": correctIndex,
       };
 }

@@ -22,10 +22,12 @@ class _AllCoursesState extends State<AllCourses> {
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
-            return const Expanded(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+            return Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                CircularProgressIndicator(),
+              ],
             );
           default:
             if (snapshot.hasError) {
