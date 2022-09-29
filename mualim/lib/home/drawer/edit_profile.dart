@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:get/get.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:mualim/constants/app_theme.dart';
+import 'package:mualim/controllers/user_profile_controller.dart';
 import 'package:mualim/helper/helper.dart';
 import 'package:mualim/main.dart';
 
@@ -15,7 +15,7 @@ class ProfileEdit extends StatefulWidget {
 }
 
 class _ProfileEditState extends State<ProfileEdit> {
-
+  final userProfileController = Get.put(UserProfileController());
   final formKey = GlobalKey<FormState>();
   final TextEditingController username =
       TextEditingController(text: prefs!.getString('username'));
@@ -200,7 +200,24 @@ class _ProfileEditState extends State<ProfileEdit> {
                         horizontal: 20,
                       ),
                       child: ElevatedButton(
-                        onPressed: () async {},
+                        onPressed: () async {
+                          processLoading(context);
+                          userProfileController.updateProfile(context, {
+                            'name': username.text,
+                            'email': email.text,
+                          }).then((value) {
+                            if (value == 'success') {
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                              setState(() {});
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Profile Updated Successfully'),
+                                ),
+                              );
+                            }
+                          });
+                        },
                         style: ButtonStyle(
                           foregroundColor:
                               MaterialStateProperty.all<Color>(AppTheme.white),

@@ -104,9 +104,7 @@ class QuestionController extends GetxController
             title: const Center(
               child: Text('Your score is:'),
             ),
-            content: Center(
-              child: Text('${correctAns * 10}/${questions.length * 10}'),
-            ),
+            content: Text('${_numOfCorrectAns * 10}/${questions.length * 10}'),
             actions: [
               MaterialButton(
                 onPressed: () {

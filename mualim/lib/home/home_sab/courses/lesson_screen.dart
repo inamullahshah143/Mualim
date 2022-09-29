@@ -80,7 +80,7 @@ class _LessonScreenState extends State<LessonScreen> {
                                 ? () {
                                     processLoading(context);
                                     downloadController
-                                        .downloadVideo(activeVideo)
+                                        .downloadVideo(activeVideo, context)
                                         .whenComplete(() {
                                       Navigator.of(context).pop();
                                     });

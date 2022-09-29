@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mualim/constants/pdf_view.dart';
-import 'package:mualim/main.dart';
 
 import '../../controllers/subject_controller.dart';
 

@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_youtube_downloader/flutter_youtube_downloader.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get.dart';
+import 'package:mualim/controllers/youtube_video_controller.dart';
 // import 'package:permission_handler/permission_handler.dart';
 
 class DownloadController extends GetxController {
@@ -23,10 +24,13 @@ class DownloadController extends GetxController {
     );
   }
 
-  Future<void> downloadVideo(url) async {
-  
-    final result = await FlutterYoutubeDownloader.downloadVideo(
-        url, "Video Title goes Here", 18);
-    print(result);
+  Future<void> downloadVideo(url, context) async {
+    final youtubeVideoDetailsController =
+        Get.put(YoutubeVideoDetailsController());
+    await youtubeVideoDetailsController
+        .getDetail(url, context)
+        .then((value) async {
+      await FlutterYoutubeDownloader.downloadVideo(url, value!.title, 18);
+    });
   }
 }
