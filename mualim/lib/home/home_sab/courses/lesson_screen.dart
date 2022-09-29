@@ -5,6 +5,7 @@ import 'package:mualim/constants/youtube_video_player.dart';
 import 'package:mualim/controllers/download_controller.dart';
 import 'package:mualim/controllers/quiz_controller.dart';
 import 'package:mualim/controllers/subject_controller.dart';
+import 'package:mualim/controllers/youtube_video_controller.dart';
 import 'package:mualim/home/home_sab/courses/quiz_screen.dart';
 import 'package:mualim/model/chapter_model.dart';
 import 'package:mualim/utils/api_utils.dart';
@@ -23,7 +24,7 @@ class _LessonScreenState extends State<LessonScreen> {
   List<String> files = [];
   List sampleData = [];
 
-  String? activeVideo;
+  String activeVideo = '';
   TabController? tabController;
   void handleClick(String value) {
     switch (value) {
@@ -37,6 +38,8 @@ class _LessonScreenState extends State<LessonScreen> {
     final subjectController = Get.put(SubjectController());
     final quizController = Get.put(QuizController());
     final downloadController = Get.put(DownloadController());
+    final youtubeVideoDetailsController =
+        Get.put(YoutubeVideoDetailsController());
     return FutureBuilder<ChapterModel?>(
       future: subjectController.chapterDetails(widget.chapterId, context),
       builder: (context, snapshot) {
@@ -53,9 +56,7 @@ class _LessonScreenState extends State<LessonScreen> {
                 body: Text('Error: ${snapshot.error}'),
               );
             } else {
-              final data = snapshot.data;
-              activeVideo =
-                  data!.chapter.videos.isEmpty ? '' : data.chapter.videos.first;
+              final data = snapshot.data!;
               files.clear();
               for (var element in data.chapter.files) {
                 files.add(ApiUtils.storageUrl + element);
@@ -75,15 +76,17 @@ class _LessonScreenState extends State<LessonScreen> {
                         return {'Download'}.map((String choice) {
                           return PopupMenuItem<String>(
                             value: choice,
+                            onTap: data.chapter.videos.isNotEmpty
+                                ? () {
+                                    processLoading(context);
+                                    downloadController
+                                        .downloadVideo(activeVideo)
+                                        .whenComplete(() {
+                                      Navigator.of(context).pop();
+                                    });
+                                  }
+                                : () {},
                             child: Text(choice),
-                            onTap: () {
-                              processLoading(context);
-                              downloadController
-                                  .downloadVideo(activeVideo)
-                                  .whenComplete(() {
-                                Navigator.of(context).pop();
-                              });
-                            },
                           );
                         }).toList();
                       },
@@ -98,7 +101,9 @@ class _LessonScreenState extends State<LessonScreen> {
                             child: Card(
                               clipBehavior: Clip.hardEdge,
                               child: YoutubeVideoPlayer(
-                                youtubeUrl: activeVideo!,
+                                youtubeUrl: activeVideo.isEmpty
+                                    ? data.chapter.videos.first
+                                    : activeVideo,
                               ),
                             ),
                           )
@@ -111,86 +116,138 @@ class _LessonScreenState extends State<LessonScreen> {
                       child: Column(
                         children: [
                           data.chapter.videos.isNotEmpty
-                              ? SizedBox(
-                                  height: 175,
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: data.chapter.videos.length,
-                                    itemBuilder: ((context, index) {
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10.0, vertical: 5),
-                                        child: SizedBox(
-                                          width: 175,
-                                          child: MaterialButton(
-                                            color: Colors.white,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                            ),
-                                            padding: EdgeInsets.zero,
-                                            onPressed: () {
-                                              setState(() {
-                                                activeVideo =
-                                                    data.chapter.videos[index];
-                                              });
-                                            },
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              child: Column(
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Container(
-                                                      width: 100,
-                                                      height: 100,
-                                                      decoration:
-                                                          const BoxDecoration(
-                                                        image: DecorationImage(
-                                                          image: AssetImage(
-                                                            'assets/icons/youtube.png',
+                              ? Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: FutureBuilder<
+                                      List<Map<String, dynamic>>?>(
+                                    future:
+                                        youtubeVideoDetailsController.videoList(
+                                            data.chapter.videos, context),
+                                    builder: (context, snapshot) {
+                                      switch (snapshot.connectionState) {
+                                        case ConnectionState.waiting:
+                                          return const Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        default:
+                                          if (snapshot.hasError) {
+                                            return Text(
+                                                'Error: ${snapshot.error}');
+                                          } else {
+                                            final data = snapshot.data;
+                                            return SizedBox(
+                                              height: 175,
+                                              child: ListView.builder(
+                                                shrinkWrap: true,
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                itemCount: data!.length,
+                                                itemBuilder: ((context, index) {
+                                                  return Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 10.0,
+                                                        vertical: 5),
+                                                    child: SizedBox(
+                                                      width: 175,
+                                                      child: MaterialButton(
+                                                        color: Colors.white,
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(15),
+                                                        ),
+                                                        padding:
+                                                            EdgeInsets.zero,
+                                                        onPressed: () {
+                                                          setState(() {
+                                                            activeVideo =
+                                                                data[index]
+                                                                    ['baseUrl'];
+                                                          });
+                                                        },
+                                                        child: ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(15),
+                                                          clipBehavior:
+                                                              Clip.hardEdge,
+                                                          child: Column(
+                                                            children: [
+                                                              Container(
+                                                                height: 100,
+                                                                margin:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        top:
+                                                                            15),
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              15),
+                                                                  image:
+                                                                      DecorationImage(
+                                                                    image:
+                                                                        NetworkImage(
+                                                                      data[index]
+                                                                          [
+                                                                          'thumbnail']!,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        10.0),
+                                                                child: Column(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .max,
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Text(
+                                                                      data[index]
+                                                                          [
+                                                                          'title']!,
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      maxLines:
+                                                                          2,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontSize:
+                                                                            14,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ],
                                                           ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            10.0),
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          'Lecture Video ${index + 1}',
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
+                                                  );
+                                                }),
                                               ),
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    }),
+                                            );
+                                          }
+                                      }
+                                    },
                                   ),
                                 )
                               : Container(),
