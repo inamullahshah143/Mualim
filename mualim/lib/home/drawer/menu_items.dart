@@ -4,6 +4,9 @@ import 'package:get/get.dart';
 import 'package:mualim/auth/onboard_screen.dart';
 import 'package:mualim/constants/app_theme.dart';
 import 'package:mualim/controllers/login_controller.dart';
+import 'package:mualim/home/drawer/about_us.dart';
+import 'package:mualim/home/drawer/edit_profile.dart';
+import 'package:mualim/home/drawer/privacy_policy.dart';
 import 'package:mualim/main.dart';
 
 class MenuItems extends StatelessWidget {
@@ -59,6 +62,7 @@ class MenuItems extends StatelessWidget {
               ListTile(
                 onTap: () {
                   ZoomDrawer.of(context)!.close();
+                  Get.to(const ProfileEdit());
                 },
                 leading: const Icon(
                   Icons.person_outlined,
@@ -81,6 +85,7 @@ class MenuItems extends StatelessWidget {
               ListTile(
                 onTap: () {
                   ZoomDrawer.of(context)!.close();
+                  Get.to(const PrivacyPolicy());
                 },
                 leading: const Icon(
                   Icons.policy_outlined,
@@ -92,6 +97,7 @@ class MenuItems extends StatelessWidget {
               ListTile(
                 onTap: () {
                   ZoomDrawer.of(context)!.close();
+                  Get.to(const AboutUs());
                 },
                 leading: const Icon(
                   Icons.info_outline,
