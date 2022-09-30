@@ -5,7 +5,7 @@ import 'package:mualim/main.dart';
 import 'package:mualim/utils/api_utils.dart';
 
 class UserProfileController extends GetxController {
-  Future<String> updateProfile(context, Map<String, dynamic> data) async {
+  Future<String> updateProfile(context, data) async {
     try {
       final response = await Dio().post(
         '${ApiUtils.baseUrl}/profile',
@@ -23,9 +23,10 @@ class UserProfileController extends GetxController {
         return 'error';
       }
     } on DioError catch (e) {
+      Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(e.response!.data.toString()),
+          content: Text(e.error.toString()),
         ),
       );
       return 'error';

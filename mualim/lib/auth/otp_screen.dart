@@ -168,6 +168,8 @@ class _OTPScreenState extends State<OTPScreen> {
                                       .setString('email', response.user.email);
                                   prefs!
                                       .setString('phone', response.user.phone);
+                                  // prefs!.setString(
+                                  //     'picture', response.user.image);
                                   prefs!.setString('token', response.token);
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(

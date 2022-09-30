@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:mualim/auth/login_screen.dart';
 import 'package:mualim/auth/otp_screen.dart';
 import 'package:mualim/constants/app_theme.dart';
 import 'package:mualim/helper/helper.dart';
+import 'package:mualim/home/drawer/privacy_policy.dart';
 import 'package:mualim/model/registration_model.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -569,7 +571,9 @@ class _SignupScreenState extends State<SignupScreen> {
               Align(
                 alignment: Alignment.center,
                 child: MaterialButton(
-                  onPressed: () async {},
+                  onPressed: () async {
+                    Get.offAll(LoginScreen());
+                  },
                   child: const Text(
                     'Sign In',
                     style: TextStyle(
@@ -624,7 +628,9 @@ class _SignupScreenState extends State<SignupScreen> {
                         WidgetSpan(
                           alignment: PlaceholderAlignment.middle,
                           child: InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Get.to(const PrivacyPolicy());
+                            },
                             child: const Text(
                               'Privacy Policy',
                               style: TextStyle(

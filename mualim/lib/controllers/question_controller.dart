@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mualim/constants/app_theme.dart';
 import 'package:mualim/controllers/subject_controller.dart';
 import 'package:mualim/model/question_model.dart';
 
@@ -104,7 +105,9 @@ class QuestionController extends GetxController
             actions: [
               MaterialButton(
                 onPressed: () {
-                  subjectController.updateChapterIndex(subjectId!, context);
+                  processLoading(context);
+                  subjectController.updateChapterIndex(
+                      subjectId!, context, _numOfCorrectAns, questions.length);
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();

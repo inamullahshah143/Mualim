@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
@@ -5,6 +7,7 @@ import 'package:mualim/constants/app_theme.dart';
 import 'package:mualim/home/home_screen.dart';
 import 'package:mualim/home/profile_screen.dart';
 import 'package:mualim/home/search_screen.dart';
+import 'package:mualim/main.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -26,11 +29,11 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       body: _selectedIndex == 0
           ? const HomeScreen()
-              : _selectedIndex == 1
-                  ? const SearchScreen()
-                  : _selectedIndex == 2
-                      ? const ProfileScreen()
-                      : Container(),
+          : _selectedIndex == 1
+              ? const SearchScreen()
+              : _selectedIndex == 2
+                  ? const ProfileScreen()
+                  : Container(),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(10.0),
         child: GNav(
@@ -55,20 +58,27 @@ class _DashboardState extends State<Dashboard> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           duration: const Duration(milliseconds: 400),
           color: Colors.black,
-          tabs: const [
-            GButton(
+          tabs: [
+            const GButton(
               icon: LineIcons.home,
               text: 'Home',
             ),
-            GButton(
+            const GButton(
               icon: LineIcons.search,
               text: 'Search',
             ),
             GButton(
               leading: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    'https://1.bp.blogspot.com/-ytMsk6NJCIc/YRDL86N7-CI/AAAAAAAAM_Q/3VFXo2IqsmMxqKbZYlERxjcLX7uA1L67QCLcBGAsYHQ/s500/unique-boys-whatsapp-dp-images-boys-dpz-dp-for-boys-profile-pictures-for-Boys%2B%25281%2529.jpg'),
                 radius: 18,
+                backgroundImage: prefs!.getString('picture') != null
+                    ? Image.file(
+                        File(prefs!.getString('picture').toString()),
+                        fit: BoxFit.fill,
+                      ).image
+                    : Image.network(
+                        'https://1.bp.blogspot.com/-ytMsk6NJCIc/YRDL86N7-CI/AAAAAAAAM_Q/3VFXo2IqsmMxqKbZYlERxjcLX7uA1L67QCLcBGAsYHQ/s500/unique-boys-whatsapp-dp-images-boys-dpz-dp-for-boys-profile-pictures-for-Boys%2B%25281%2529.jpg',
+                        fit: BoxFit.fill,
+                      ).image,
               ),
               icon: LineIcons.user,
               text: 'Profile',

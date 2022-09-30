@@ -141,8 +141,12 @@ class SubjectController extends GetxController {
     }
   }
 
-  Future<ChapterStatusModel?> updateChapterIndex(int subjectId, context) async {
+  Future<ChapterStatusModel?> updateChapterIndex(
+      int subjectId, context, score, total) async {
     int length = 0;
+    int chapterId = 0;
+    double percantage = (score / total) * 100;
+
     try {
       await Dio()
           .post(
@@ -168,7 +172,9 @@ class SubjectController extends GetxController {
           ),
         )
             .then((value) async {
-          if (int.parse(value.data['satus']['chapter_no']) < length) {
+          chapterId = value.data['satus']['chapter_id'];
+          if (int.parse(value.data['satus']['chapter_no']) < length &&
+              percantage > 50) {
             final response = await Dio().post(
               '${ApiUtils.baseUrl}/status/store',
               data: {
@@ -189,17 +195,17 @@ class SubjectController extends GetxController {
             }
           }
         }).whenComplete(() async {
-          await Dio()
-            .post(
-          '${ApiUtils.baseUrl}/status',
-          data: {
-            'subject_id': subjectId,
-          },
-          options: Options(
-            headers: {'Authorization': 'Bearer ${prefs!.getString('token')}'},
-          ),
-        )
-            .then((value) async {});
+          await Dio().post(
+            '${ApiUtils.baseUrl}/score/store',
+            data: {
+              'subject_id': subjectId,
+              'chapter_id': chapterId,
+              'score': percantage,
+            },
+            options: Options(
+              headers: {'Authorization': 'Bearer ${prefs!.getString('token')}'},
+            ),
+          );
         });
       });
     } on DioError catch (e) {

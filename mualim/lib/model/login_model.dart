@@ -1,68 +1,72 @@
+// To parse this JSON data, do
+//
+//     final loginModel = loginModelFromJson(jsonString);
 
 import 'dart:convert';
 
-LoginModel loginModelFromJson(String str) => LoginModel.fromJson(json.decode(str));
+LoginModel loginModelFromJson(String str) =>
+    LoginModel.fromJson(json.decode(str));
 
 String loginModelToJson(LoginModel data) => json.encode(data.toJson());
 
 class LoginModel {
-    LoginModel({
-        required this.success,
-        required this.token,
-        required this.user,
-    });
+  LoginModel({
+    required this.success,
+    required this.token,
+    required this.user,
+  });
 
-    String success;
-    String token;
-    User user;
+  String success;
+  String token;
+  User user;
 
-    factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(
+  factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(
         success: json["success"],
         token: json["token"],
         user: User.fromJson(json["user"]),
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "success": success,
         "token": token,
         "user": user.toJson(),
-    };
+      };
 }
 
 class User {
-    User({
-        required this.id,
-        required this.name,
-        required this.gender,
-        required this.organization,
-        required this.designation,
-        required this.phone,
-        required this.email,
-        required this.qualification,
-        required this.experience,
-        required this.cnic,
-        required this.action,
-        required this.createdAt,
-        required this.updatedAt,
-        required this.deletedAt,
-    });
+  User({
+    required this.id,
+    required this.name,
+    required this.gender,
+    required this.organization,
+    required this.designation,
+    required this.phone,
+    required this.email,
+    required this.qualification,
+    required this.experience,
+    required this.cnic,
+    required this.action,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.image,
+  });
 
-    int id;
-    String name;
-    String gender;
-    String organization;
-    String designation;
-    String phone;
-    String email;
-    String qualification;
-    int experience;
-    String cnic;
-    String action;
-    DateTime createdAt;
-    DateTime updatedAt;
-    dynamic deletedAt;
+  int id;
+  String name;
+  String gender;
+  String organization;
+  String designation;
+  String phone;
+  String email;
+  String qualification;
+  int experience;
+  String cnic;
+  String action;
+  DateTime createdAt;
+  DateTime updatedAt;
+  String image;
 
-    factory User.fromJson(Map<String, dynamic> json) => User(
+  factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
         name: json["name"],
         gender: json["gender"],
@@ -76,10 +80,10 @@ class User {
         action: json["action"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
-        deletedAt: json["deleted_at"],
-    );
+        image: json["image"],
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
         "gender": gender,
@@ -93,6 +97,6 @@ class User {
         "action": action,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
-        "deleted_at": deletedAt,
-    };
+        "image": image,
+      };
 }

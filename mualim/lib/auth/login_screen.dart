@@ -202,6 +202,7 @@ class LoginScreen extends StatelessWidget {
                               prefs!.setString('email', response.user.email);
                               prefs!.setString('phone', response.user.phone);
                               prefs!.setString('token', response.token);
+                              // prefs!.setString('picture', response.user.image);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text("User Login Successfully"),

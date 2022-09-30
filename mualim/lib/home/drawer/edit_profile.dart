@@ -1,7 +1,9 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mualim/constants/app_theme.dart';
 import 'package:mualim/controllers/user_profile_controller.dart';
 import 'package:mualim/helper/helper.dart';
@@ -62,21 +64,59 @@ class _ProfileEditState extends State<ProfileEdit> {
                 children: [
                   CircleAvatar(
                     radius: 50,
-                    backgroundImage: prefs!.getString('picture') != null
-                        ? Image.network(
-                            prefs!.getString('picture').toString(),
+                    backgroundImage: profilePicture != null
+                        ? Image.file(
+                            profilePicture!,
                             fit: BoxFit.fill,
                           ).image
-                        : Image.network(
-                            'https://1.bp.blogspot.com/-ytMsk6NJCIc/YRDL86N7-CI/AAAAAAAAM_Q/3VFXo2IqsmMxqKbZYlERxjcLX7uA1L67QCLcBGAsYHQ/s500/unique-boys-whatsapp-dp-images-boys-dpz-dp-for-boys-profile-pictures-for-Boys%2B%25281%2529.jpg',
-                            fit: BoxFit.fill,
-                          ).image,
+                        : prefs!.getString('picture') != null
+                            ? Image.file(
+                                File(prefs!.getString('picture').toString()),
+                                fit: BoxFit.fill,
+                              ).image
+                            : Image.network(
+                                'https://1.bp.blogspot.com/-ytMsk6NJCIc/YRDL86N7-CI/AAAAAAAAM_Q/3VFXo2IqsmMxqKbZYlERxjcLX7uA1L67QCLcBGAsYHQ/s500/unique-boys-whatsapp-dp-images-boys-dpz-dp-for-boys-profile-pictures-for-Boys%2B%25281%2529.jpg',
+                                fit: BoxFit.fill,
+                              ).image,
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return SizedBox(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: IconButton(
+                                      onPressed: () {
+                                        getFromCamera();
+                                      },
+                                      icon: const Icon(FontAwesome5.camera),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: IconButton(
+                                      onPressed: () {
+                                        getFromGallery();
+                                      },
+                                      icon: const Icon(FontAwesome5.images),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          });
+                    },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
@@ -202,10 +242,14 @@ class _ProfileEditState extends State<ProfileEdit> {
                       child: ElevatedButton(
                         onPressed: () async {
                           processLoading(context);
-                          userProfileController.updateProfile(context, {
+                          Map<String, dynamic> formData = {
                             'name': username.text,
                             'email': email.text,
-                          }).then((value) {
+                          };
+
+                          userProfileController
+                              .updateProfile(context, formData)
+                              .then((value) {
                             if (value == 'success') {
                               Navigator.of(context).pop();
                               Navigator.of(context).pop();
@@ -245,42 +289,28 @@ class _ProfileEditState extends State<ProfileEdit> {
       ),
     );
   }
-}
 
-class CustomFormImput extends StatelessWidget {
-  const CustomFormImput({
-    Key? key,
-    required this.label,
-    required this.value,
-  }) : super(key: key);
-
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 50,
-      padding: const EdgeInsets.only(left: 40),
-      decoration: ShapeDecoration(
-        shape: const StadiumBorder(),
-        color: AppTheme.secondary.withOpacity(0.25),
-      ),
-      child: TextFormField(
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          labelText: label,
-          contentPadding: const EdgeInsets.only(
-            top: 10,
-            bottom: 10,
-          ),
-        ),
-        initialValue: value,
-        style: const TextStyle(
-          fontSize: 14,
-        ),
-      ),
+  getFromGallery() async {
+    XFile? pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
     );
+    if (pickedFile != null) {
+      setState(() {
+        prefs!.setString('picture', pickedFile.path);
+        profilePicture = File(pickedFile.path);
+      });
+    }
+  }
+
+  getFromCamera() async {
+    XFile? pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+    );
+    if (pickedFile != null) {
+      setState(() {
+        prefs!.setString('picture', pickedFile.path);
+        profilePicture = File(pickedFile.path);
+      });
+    }
   }
 }
