@@ -68,19 +68,19 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
-        name: json["name"],
-        gender: json["gender"],
-        organization: json["organization"],
-        designation: json["designation"],
-        phone: json["phone"],
-        email: json["email"],
-        qualification: json["qualification"],
+        name: json["name"].toString(),
+        gender: json["gender"].toString(),
+        organization: json["organization"].toString(),
+        designation: json["designation"].toString(),
+        phone: json["phone"].toString(),
+        email: json["email"].toString(),
+        qualification: json["qualification"].toString(),
         experience: json["experience"],
-        cnic: json["cnic"],
+        cnic: json["cnic"].toString(),
         action: json["action"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
-        image: json["image"],
+        image: json["image"].toString(),
       );
 
   Map<String, dynamic> toJson() => {
