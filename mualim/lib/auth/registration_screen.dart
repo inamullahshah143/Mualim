@@ -528,10 +528,9 @@ class _SignupScreenState extends State<SignupScreen> {
                             phoneNo.text.toString(),
                       };
                       Navigator.of(context).pop();
-                      Get.to(OTPScreen(
-                        data: data,
-                        isLogin: false,
-                      ));
+                      Get.to(
+                        OTPScreen(data: data, isForget: false),
+                      );
                     }
                   },
                   style: ButtonStyle(

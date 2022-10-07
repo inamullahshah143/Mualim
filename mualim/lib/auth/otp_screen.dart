@@ -17,8 +17,8 @@ final loginController = Get.put(LoginController());
 
 class OTPScreen extends StatefulWidget {
   final Map<String, dynamic> data;
-  final bool isLogin;
-  const OTPScreen({Key? key, required this.data, required this.isLogin})
+  final bool isForget;
+  const OTPScreen({Key? key, required this.data, required this.isForget})
       : super(key: key);
 
   @override
@@ -156,31 +156,8 @@ class _OTPScreenState extends State<OTPScreen> {
                               verificationId: _verificationCode!, smsCode: pin))
                           .then((value) async {
                         if (value.user != null) {
-                          if (widget.isLogin) {
-                            await loginController
-                                .loginProcess(widget.data, context)
-                                .then(
-                              (response) {
-                                if (response!.success == 'successfully login') {
-                                  prefs!.setString(
-                                      'username', response.user.name);
-                                  prefs!
-                                      .setString('email', response.user.email);
-                                  prefs!
-                                      .setString('phone', response.user.phone);
-                                  // prefs!.setString(
-                                  //     'picture', response.user.image);
-                                  prefs!.setString('token', response.token);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text("User Login Successfully"),
-                                    ),
-                                  );
-                                  Navigator.of(context).pop();
-                                  Get.offAll(const MenuDrawer());
-                                }
-                              },
-                            );
+                          if (widget.isForget) {
+                            //
                           } else {
                             await registrationController
                                 .registrationProcess(widget.data, context)
@@ -296,25 +273,8 @@ class _OTPScreenState extends State<OTPScreen> {
               .signInWithCredential(credential)
               .then((value) async {
             if (value.user != null) {
-              if (widget.isLogin) {
-                await loginController.loginProcess(widget.data, context).then(
-                  (response) {
-                    if (response!.success == 'successfully login') {
-                      prefs!.setBool('isLogin', true);
-                      prefs!.setString('username', response.user.name);
-                      prefs!.setString('email', response.user.email);
-                      prefs!.setString('phone', response.user.phone);
-                      prefs!.setString('token', response.token);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("User Login Successfully"),
-                        ),
-                      );
-                      Navigator.of(context).pop();
-                      Get.offAll(const MenuDrawer());
-                    }
-                  },
-                );
+              if (widget.isForget) {
+                //
               } else {
                 await registrationController
                     .registrationProcess(widget.data, context)
