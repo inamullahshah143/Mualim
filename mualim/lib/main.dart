@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           child: child!,
         );
       },
-      title: 'Mualim',
+      title: 'Muallim',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: "Metropolis",

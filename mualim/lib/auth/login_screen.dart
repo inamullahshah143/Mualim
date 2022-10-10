@@ -34,7 +34,7 @@ class LoginScreen extends StatelessWidget {
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    'Welcome to Mualim!',
+                    'Welcome to Muallim!',
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,

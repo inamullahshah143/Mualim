@@ -8,7 +8,7 @@ import 'package:mualim/controllers/youtube_video_controller.dart';
 
 class DownloadController extends GetxController {
   Future downloadFile(String url) async {
-    const folderName = 'Mualim';
+    const folderName = 'Muallim';
     final path = Directory('/storage/emulated/0/Download/$folderName');
     if ((await path.exists())) {
     } else {

@@ -37,7 +37,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
                     ),
                   ),
                   TextSpan(
-                    text: '\nMualim',
+                    text: '\nMuallim',
                     style: TextStyle(
                       fontSize: 28,
                       fontFamily: "Metropolis",

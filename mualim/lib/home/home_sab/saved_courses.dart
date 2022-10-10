@@ -16,7 +16,7 @@ class SavedCourses extends StatefulWidget {
 }
 
 class _SavedCoursesState extends State<SavedCourses> {
-  var dir = Directory('/storage/emulated/0/Download/Mualim');
+  var dir = Directory('/storage/emulated/0/Download/Muallim');
   List? contents;
   List filePath = [];
   @override

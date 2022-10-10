@@ -71,7 +71,7 @@ class _ReaderState extends State<Reader> {
   }
 
   createFolder() async {
-    const folderName = 'Mualim';
+    const folderName = 'Muallim';
     final path = Directory('/storage/emulated/0/Download/$folderName');
     if ((await path.exists())) {
     } else {

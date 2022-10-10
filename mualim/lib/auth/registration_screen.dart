@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:mualim/auth/login_screen.dart';
 import 'package:mualim/auth/otp_screen.dart';
 import 'package:mualim/constants/app_theme.dart';
@@ -20,15 +21,17 @@ class _SignupScreenState extends State<SignupScreen> {
   RegistrationModel? registrationModel;
   final String initialCountry = 'PK';
   final gender = ''.obs;
-  final PhoneNumber number = PhoneNumber(isoCode: 'PK', dialCode: '+92');
+  final designation = ''.obs;
+  final qualification = ''.obs;
+  final district = ''.obs;
+  final province = ''.obs;
   final isValidNo = true.obs;
+  final PhoneNumber number = PhoneNumber(isoCode: 'PK', dialCode: '+92');
   final formKey = GlobalKey<FormState>();
   final TextEditingController fullName = TextEditingController();
   final TextEditingController email = TextEditingController();
   final TextEditingController organization = TextEditingController();
-  final TextEditingController designation = TextEditingController();
   final TextEditingController phoneNo = TextEditingController();
-  final TextEditingController qualification = TextEditingController();
   final TextEditingController experience = TextEditingController();
   final TextEditingController cnic = TextEditingController();
   final TextEditingController password = TextEditingController();
@@ -62,7 +65,7 @@ class _SignupScreenState extends State<SignupScreen> {
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
-                  'Welcome to Mualim!',
+                  'Welcome to Muallim!',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -110,7 +113,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide.none,
                           ),
-                          hintText: 'Teacher Name',
+                          hintText: 'Name',
                           hintStyle: TextStyle(
                             color: AppTheme.fonts.withOpacity(0.5),
                             fontSize: 14,
@@ -129,7 +132,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
-                            return 'please enter the organization';
+                            return 'please enter the instituion';
                           } else {
                             return null;
                           }
@@ -142,7 +145,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide.none,
                           ),
-                          hintText: 'Organization',
+                          hintText: 'Instituion',
                           hintStyle: TextStyle(
                             color: AppTheme.fonts.withOpacity(0.5),
                             fontSize: 14,
@@ -155,13 +158,10 @@ class _SignupScreenState extends State<SignupScreen> {
                         vertical: 5.0,
                         horizontal: 20,
                       ),
-                      child: TextFormField(
-                        controller: designation,
-                        keyboardType: TextInputType.text,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                      child: DropdownButtonFormField(
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
-                            return 'please enter the designation';
+                            return 'please select the province';
                           } else {
                             return null;
                           }
@@ -169,17 +169,199 @@ class _SignupScreenState extends State<SignupScreen> {
                         decoration: InputDecoration(
                           isDense: true,
                           filled: true,
+                          isCollapsed: true,
                           fillColor: AppTheme.secondary.withOpacity(0.075),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide.none,
                           ),
+                          contentPadding: const EdgeInsets.all(12.5),
+                          hintText: 'Province',
+                          hintStyle: TextStyle(
+                            color: AppTheme.fonts.withOpacity(0.5),
+                            fontSize: 14,
+                          ),
+                        ),
+                        items: const [
+                          DropdownMenuItem(
+                            value: 'punjab',
+                            child: Text('Punjab'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'azad jammu and kashmir',
+                            child: Text('Azad Jammu and Kashmir'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'sindh',
+                            child: Text('Sindh'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'balochistan',
+                            child: Text('Balochistan'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'gilgit baltista',
+                            child: Text('Gilgit Baltista'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'khyber pakhtunkhwa',
+                            child: Text('Khyber Pakhtunkhwa'),
+                          ),
+                        ],
+                        onChanged: (String? value) {
+                          province.value = value!;
+                        },
+                      ),
+                    ),
+                    Obx(
+                      () {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 5.0,
+                            horizontal: 20,
+                          ),
+                          child: DropdownButtonFormField(
+                            validator: (String? value) {
+                              if (value == null || value.isEmpty) {
+                                return 'please select the district';
+                              } else {
+                                return null;
+                              }
+                            },
+                            decoration: InputDecoration(
+                              isDense: true,
+                              filled: true,
+                              isCollapsed: true,
+                              fillColor: AppTheme.secondary.withOpacity(0.075),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide.none,
+                              ),
+                              contentPadding: const EdgeInsets.all(12.5),
+                              hintText: 'District',
+                              hintStyle: TextStyle(
+                                color: AppTheme.fonts.withOpacity(0.5),
+                                fontSize: 14,
+                              ),
+                            ),
+                            items: province.value == 'punjab'
+                                ? pubjabDest.map((list) {
+                                    return DropdownMenuItem(
+                                      value: list.toString().toLowerCase(),
+                                      child: Text(
+                                        list.toString(),
+                                      ),
+                                    );
+                                  }).toList()
+                                : province.value == 'azad jammu and kashmir'
+                                    ? ajkDest.map((list) {
+                                        return DropdownMenuItem(
+                                          value: list.toString().toLowerCase(),
+                                          child: Text(
+                                            list.toString(),
+                                          ),
+                                        );
+                                      }).toList()
+                                    : province.value == 'sindh'
+                                        ? sindhDest.map((list) {
+                                            return DropdownMenuItem(
+                                              value:
+                                                  list.toString().toLowerCase(),
+                                              child: Text(
+                                                list.toString(),
+                                              ),
+                                            );
+                                          }).toList()
+                                        : province.value == 'balochistan'
+                                            ? blochDest.map((list) {
+                                                return DropdownMenuItem(
+                                                  value: list
+                                                      .toString()
+                                                      .toLowerCase(),
+                                                  child: Text(
+                                                    list.toString(),
+                                                  ),
+                                                );
+                                              }).toList()
+                                            : province.value ==
+                                                    'gilgit baltista'
+                                                ? gilgitDest.map((list) {
+                                                    return DropdownMenuItem(
+                                                      value: list
+                                                          .toString()
+                                                          .toLowerCase(),
+                                                      child: Text(
+                                                        list.toString(),
+                                                      ),
+                                                    );
+                                                  }).toList()
+                                                : kpkDest.map((list) {
+                                                    return DropdownMenuItem(
+                                                      value: list
+                                                          .toString()
+                                                          .toLowerCase(),
+                                                      child: Text(
+                                                        list.toString(),
+                                                      ),
+                                                    );
+                                                  }).toList(),
+                            onChanged: (String? value) {
+                              district.value = value!;
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 5.0,
+                        horizontal: 20,
+                      ),
+                      child: DropdownButtonFormField(
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return 'please select the designation';
+                          } else {
+                            return null;
+                          }
+                        },
+                        decoration: InputDecoration(
+                          isDense: true,
+                          filled: true,
+                          isCollapsed: true,
+                          fillColor: AppTheme.secondary.withOpacity(0.075),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: const EdgeInsets.all(12.5),
                           hintText: 'Designation',
                           hintStyle: TextStyle(
                             color: AppTheme.fonts.withOpacity(0.5),
                             fontSize: 14,
                           ),
                         ),
+                        items: const [
+                          DropdownMenuItem(
+                            value: 'teacher',
+                            child: Text('Teacher'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'district officer',
+                            child: Text('District Officer'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'district manager',
+                            child: Text('District Manager'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'manager',
+                            child: Text('Manager'),
+                          ),
+                        ],
+                        onChanged: (String? value) {
+                          designation.value = value!;
+                        },
                       ),
                     ),
                     Padding(
@@ -187,13 +369,10 @@ class _SignupScreenState extends State<SignupScreen> {
                         vertical: 5.0,
                         horizontal: 20,
                       ),
-                      child: TextFormField(
-                        keyboardType: TextInputType.text,
-                        controller: qualification,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                      child: DropdownButtonFormField(
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
-                            return 'please enter the qualification';
+                            return 'please select the qualification';
                           } else {
                             return null;
                           }
@@ -201,17 +380,40 @@ class _SignupScreenState extends State<SignupScreen> {
                         decoration: InputDecoration(
                           isDense: true,
                           filled: true,
+                          isCollapsed: true,
                           fillColor: AppTheme.secondary.withOpacity(0.075),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide.none,
                           ),
+                          contentPadding: const EdgeInsets.all(12.5),
                           hintText: 'Qualification',
                           hintStyle: TextStyle(
                             color: AppTheme.fonts.withOpacity(0.5),
                             fontSize: 14,
                           ),
                         ),
+                        items: const [
+                          DropdownMenuItem(
+                            value: 'matric',
+                            child: Text('Matric'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'intermediate',
+                            child: Text('Intermediate'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'beachlor',
+                            child: Text('Beachlor'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'master',
+                            child: Text('Master'),
+                          ),
+                        ],
+                        onChanged: (String? value) {
+                          qualification.value = value!;
+                        },
                       ),
                     ),
                     Padding(
@@ -253,6 +455,11 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       child: TextFormField(
                         controller: cnic,
+                        inputFormatters: [
+                          MaskTextInputFormatter(
+                            mask: "#####-#######-#",
+                          )
+                        ],
                         keyboardType: TextInputType.number,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (String? value) {
@@ -344,7 +551,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide.none,
                           ),
-                          hintText: 'Email Address',
+                          hintText: 'Email Address (optional)',
                           hintStyle: TextStyle(
                             color: AppTheme.fonts.withOpacity(0.5),
                             fontSize: 14,
@@ -520,8 +727,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         "password": confirmPassword.text,
                         "gender": gender.value,
                         "organization": organization.text,
-                        "designation": designation.text,
-                        "qualification": qualification.text,
+                        "designation": designation.value,
+                        "qualification": qualification.value,
                         "experience": experience.text,
                         "cnic": cnic.text,
                         "phone": number.dialCode.toString() +
@@ -650,4 +857,153 @@ class _SignupScreenState extends State<SignupScreen> {
       ),
     );
   }
+
+  List pubjabDest = [
+    'Attock',
+    'Bahawalnagar',
+    'Bahawalpur',
+    'Bhakkar',
+    'Chakwal',
+    'Chiniot',
+    'Dera Ghazi Khan',
+    'Faisalabad',
+    'Gujranwala',
+    'Gujrat',
+    'Hafizabad',
+    'Jhang',
+    'Jhelum',
+    'Kasur',
+    'Khanewal',
+    'Khushab',
+    'Lahore',
+    'Layyah',
+    'Lodhran',
+    'Mandi Bahauddin',
+    'Mianwali',
+    'Multan',
+    'Muzaffargarh',
+    'Narowal',
+    'Nankana Sahib',
+    'Okara',
+    'Pakpattan',
+    'Rahim Yar Khan',
+    'Rajanpur',
+    'Rawalpindi',
+    'Sahiwal',
+    'Sargodha',
+    'Sheikhupura',
+    'Sialkot',
+    'Toba Tek Singh',
+    'Vehari',
+  ];
+  List ajkDest = [
+    'Muzaffarabad',
+    'Hattian',
+    'Neelum',
+    'Mirpur',
+    'Bhimber',
+    'Kotli',
+    'Poonch',
+    'Bagh',
+    'Haveli',
+    'Sudhnati',
+  ];
+  List sindhDest = [
+    'Badin',
+    'Dadu',
+    'Ghotki',
+    'Hyderabad',
+    'Jacobabad',
+    'Jamshoro',
+    'KARACHI',
+    'Kashmore',
+    'Khairpur',
+    'Larkana',
+    'Matiari',
+    'Mirpurkhas',
+    'Naushahro Firoze',
+    'Shaheed Benazirabad',
+    'Kambar Shahdadkot',
+    'Sanghar',
+    'Sujawal',
+    'Shikarpur',
+    'Sukkur',
+    'Tando Allahyar',
+    'Tando Muhammad Khan',
+    'Tharparkar',
+    'Thatta',
+    'Umerkot',
+  ];
+  List kpkDest = [
+    'Abbottabad',
+    'Bannu',
+    'Battagram',
+    'Buner',
+    'Charsadda',
+    'Chitral',
+    'Dera Ismail Khan',
+    'Hangu',
+    'Haripur',
+    'Karak',
+    'Kohat',
+    'Kohistan',
+    'Lakki Marwat',
+    'Lower Dir',
+    'Malakand',
+    'Mansehra',
+    'Mardan',
+    'Nowshera',
+    'Peshawar',
+    'Shangla',
+    'Swabi',
+    'Swat',
+    'Tank',
+    'Tor Ghar',
+    'Upper Dir',
+  ];
+  List blochDest = [
+    'Awaran',
+    'Barkhan',
+    'Kachi (Bolan)',
+    'Chagai',
+    'Dera Bugti',
+    'Gwadar',
+    'Harnai',
+    'Jafarabad',
+    'Jhal Magsi',
+    'Kalat',
+    'Kech (Turbat)',
+    'Kharan',
+    'Kohlu',
+    'Khuzdar',
+    'Killa Abdullah',
+    'Killa Saifullah',
+    'Lasbela',
+    'Loralai',
+    'Mastung',
+    'Musakhel',
+    'Nasirabad',
+    'Nushki',
+    'Panjgur',
+    'Pishin',
+    'Quetta',
+    'Sherani',
+    'Sibi',
+    'Washuk',
+    'Zhob',
+    'Ziarat',
+    'Lehri',
+    'Sohbatpur',
+  ];
+  List gilgitDest = [
+    'Astore',
+    'Diamer',
+    'Ghizer',
+    'Ghanche',
+    'Gilgit',
+    'Hunza-Nagar',
+    'Roundu',
+    'Skardu',
+    'Shigar',
+  ];
 }
