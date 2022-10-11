@@ -101,7 +101,27 @@ class QuestionController extends GetxController
             title: const Center(
               child: Text('Your score is:'),
             ),
-            content: Text('${_numOfCorrectAns * 10}/${questions.length * 10}'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    '${_numOfCorrectAns * 10}/${questions.length * 10}',
+                    style: const TextStyle(
+                      color: AppTheme.appThemeColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                if ((_numOfCorrectAns / questions.length) * 100 >= 50)
+                  const Text(
+                      'Congratulations you are passed this module and you are moved on next module'),
+                if ((_numOfCorrectAns / questions.length) * 100 < 50)
+                  const Text('We are Sorry! you failed this module'),
+              ],
+            ),
             actions: [
               MaterialButton(
                 onPressed: () {
