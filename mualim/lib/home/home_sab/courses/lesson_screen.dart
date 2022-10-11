@@ -28,12 +28,6 @@ class _LessonScreenState extends State<LessonScreen> {
 
   String activeVideo = '';
   TabController? tabController;
-  void handleClick(String value) {
-    switch (value) {
-      case 'Download':
-        break;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,26 +66,24 @@ class _LessonScreenState extends State<LessonScreen> {
                   title: Text(data.chapter.name),
                   foregroundColor: AppTheme.primary,
                   actions: [
-                    PopupMenuButton<String>(
-                      onSelected: handleClick,
-                      itemBuilder: (BuildContext context) {
-                        return {'Download'}.map((String choice) {
-                          return PopupMenuItem<String>(
-                            value: choice,
-                            onTap: data.chapter.videos.isNotEmpty
-                                ? () {
-                                    processLoading(context);
-                                    downloadController
-                                        .downloadVideo(activeVideo, context)
-                                        .whenComplete(() {
-                                      Navigator.of(context).pop();
-                                    });
-                                  }
-                                : () {},
-                            child: Text(choice),
-                          );
-                        }).toList();
-                      },
+                    IconButton(
+                      onPressed: data.chapter.videos.isNotEmpty
+                          ? () {
+                              processLoading(context);
+                              downloadController
+                                  .downloadVideo(
+                                      activeVideo.isEmpty
+                                          ? data.chapter.videos.first
+                                          : activeVideo,
+                                      context)
+                                  .whenComplete(() {
+                                Navigator.of(context).pop();
+                              });
+                            }
+                          : () {},
+                      icon: const Icon(
+                        Icons.download,
+                      ),
                     ),
                   ],
                 ),

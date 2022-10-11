@@ -21,18 +21,11 @@ class Option extends StatelessWidget {
         builder: (qnController) {
           Color getTheRightColor() {
             if (qnController.isAnswered) {
-              if (index == qnController.correctAns) {
+              if (index == qnController.selectedAns ) {
                 return Colors.green;
-              } else if (index == qnController.selectedAns &&
-                  qnController.selectedAns != qnController.correctAns) {
-                return Colors.red;
               }
             }
             return Colors.grey;
-          }
-
-          IconData getTheRightIcon() {
-            return getTheRightColor() == Colors.red ? Icons.close : Icons.done;
           }
 
           return InkWell(
@@ -63,7 +56,7 @@ class Option extends StatelessWidget {
                     ),
                     child: getTheRightColor() == Colors.grey
                         ? null
-                        : Icon(getTheRightIcon(), size: 16),
+                        : const Icon(Icons.done, size: 16),
                   )
                 ],
               ),

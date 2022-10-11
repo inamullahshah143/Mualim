@@ -17,6 +17,7 @@ const double kDefaultPadding = 20.0;
 processLoading(BuildContext context) {
   Dialog alert = Dialog(
     elevation: 0,
+    
     backgroundColor: Colors.transparent,
     child: Column(
       mainAxisSize: MainAxisSize.min,
