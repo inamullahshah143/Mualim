@@ -52,7 +52,7 @@ class ForgetPassword extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
-                'Please enter your email to recieve a link to create a new password via email',
+                'Please enter your registered mobile number so that we can authenticate your profile',
                 style: TextStyle(
                   fontSize: 18,
                   color: AppTheme.fonts.withOpacity(0.75),

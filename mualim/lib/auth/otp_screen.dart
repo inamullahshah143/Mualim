@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mualim/auth/password_confirmation.dart';
 import 'package:mualim/constants/app_theme.dart';
 import 'package:mualim/controllers/login_controller.dart';
 import 'package:mualim/main.dart';
@@ -157,7 +158,8 @@ class _OTPScreenState extends State<OTPScreen> {
                           .then((value) async {
                         if (value.user != null) {
                           if (widget.isForget) {
-                            //
+                            Get.to(PasswordConfirmation(
+                                phoneNo: widget.data['phone']));
                           } else {
                             await registrationController
                                 .registrationProcess(widget.data, context)

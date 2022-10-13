@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mualim/helper/genrate_certificate.dart';
 import 'package:mualim/main.dart';
 import 'package:mualim/model/chapter_model.dart';
 import 'package:mualim/model/chapter_status_model.dart';
@@ -189,6 +190,27 @@ class SubjectController extends GetxController {
             );
 
             if (response.statusCode == 200) {
+              return chapterStatusModelFromJson(jsonEncode(response.data));
+            } else {
+              return null;
+            }
+          } else if (int.parse(value.data['satus']['chapter_no']) == length &&
+              percantage > 50) {
+            final response = await Dio().post(
+              '${ApiUtils.baseUrl}/status/store',
+              data: {
+                'chapter_no': int.parse(value.data['satus']['chapter_no']) + 1,
+                'subject_id': subjectId,
+              },
+              options: Options(
+                headers: {
+                  'Authorization': 'Bearer ${prefs!.getString('token')}'
+                },
+              ),
+            );
+
+            if (response.statusCode == 200) {
+              CourseCompletionCertificatePdf(context).createPDF();
               return chapterStatusModelFromJson(jsonEncode(response.data));
             } else {
               return null;
