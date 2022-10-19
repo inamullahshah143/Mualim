@@ -175,7 +175,7 @@ class SubjectController extends GetxController {
             .then((value) async {
           chapterId = value.data['satus']['chapter_id'];
           if (int.parse(value.data['satus']['chapter_no']) < length &&
-              percantage > 50) {
+              percantage >= 50) {
             final response = await Dio().post(
               '${ApiUtils.baseUrl}/status/store',
               data: {
@@ -195,7 +195,7 @@ class SubjectController extends GetxController {
               return null;
             }
           } else if (int.parse(value.data['satus']['chapter_no']) == length &&
-              percantage > 50) {
+              percantage >= 50) {
             final response = await Dio().post(
               '${ApiUtils.baseUrl}/status/store',
               data: {

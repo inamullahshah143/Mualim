@@ -2,6 +2,8 @@
 //
 //     final quizModel = quizModelFromJson(jsonString);
 
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:convert';
 
 QuizModel quizModelFromJson(String str) => QuizModel.fromJson(json.decode(str));
@@ -30,16 +32,18 @@ class Quiz {
     required this.question,
     required this.details,
     required this.chapterId,
+    required this.createdAt,
+    required this.updatedAt,
     required this.options,
     required this.correctIndex,
   });
 
   int id;
   String question;
-  String details;
+  dynamic details;
   int chapterId;
-  DateTime? createdAt;
-  DateTime? updatedAt;
+  DateTime createdAt;
+  DateTime updatedAt;
   List<String> options;
   int correctIndex;
 
@@ -48,7 +52,11 @@ class Quiz {
         question: json["question"],
         details: json["details"],
         chapterId: json["chapter_id"],
-        options: List<String>.from(json["options"].map((x) => x)),
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+        options: List<String>.from(json["options"]
+            .where((element) => element != null)
+            .map((x) => x)),
         correctIndex: json["correctIndex"],
       );
 
@@ -57,7 +65,9 @@ class Quiz {
         "question": question,
         "details": details,
         "chapter_id": chapterId,
-        "options": List<dynamic>.from(options.map((x) => x)),
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
+        "options": List<dynamic>.from(options.where((element) => element != null).map((x) => x)),
         "correctIndex": correctIndex,
       };
 }

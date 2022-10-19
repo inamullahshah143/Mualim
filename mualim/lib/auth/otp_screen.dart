@@ -35,7 +35,10 @@ class _OTPScreenState extends State<OTPScreen> {
 
   @override
   initState() {
-    _verifyPhone();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _verifyPhone();
+    });
+
     timer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (secondsRemaining != 0) {
         setState(() {

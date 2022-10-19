@@ -30,7 +30,6 @@ class QuizController extends GetxController {
           content: Text(e.response.toString()),
         ),
       );
-
       return null;
     }
   }
