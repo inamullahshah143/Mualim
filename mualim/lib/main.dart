@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +16,7 @@ void main() async {
   await Firebase.initializeApp();
   prefs = await SharedPreferences.getInstance();
   WidgetsFlutterBinding.ensureInitialized();
+  await Directory('/storage/emulated/0/Download/Muallim').create();
   runApp(const MyApp());
 }
 

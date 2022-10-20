@@ -23,6 +23,23 @@ class ProfileScreen extends StatelessWidget {
             default:
               if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
+              } else if (!snapshot.hasData) {
+                return Column(
+                  children: [
+                    Image.asset(
+                      'assets/images/alert.png',
+                      height: MediaQuery.of(context).size.height * 0.5,
+                      width: double.infinity,
+                    ),
+                    const Text(
+                      'Profile Not Found',
+                      style: TextStyle(
+                        fontSize: 22.0,
+                        color: AppTheme.primary,
+                      ),
+                    )
+                  ],
+                );
               } else {
                 final data = snapshot.data!;
                 double totalScore = 0.0;
