@@ -66,6 +66,7 @@ class _LessonScreenState extends State<LessonScreen> {
                   title: Text(data.chapter.name),
                   foregroundColor: AppTheme.primary,
                   actions: [
+                    if(data.chapter.videos.isNotEmpty)
                     IconButton(
                       onPressed: data.chapter.videos.isNotEmpty
                           ? () {

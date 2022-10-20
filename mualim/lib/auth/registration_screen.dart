@@ -727,6 +727,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         "password": confirmPassword.text,
                         "gender": gender.value,
                         "instituion": organization.text,
+                        "organization": organization.text,
                         "province": province.value,
                         "district": district.value,
                         "designation": designation.value,

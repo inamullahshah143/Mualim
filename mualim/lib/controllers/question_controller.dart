@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mualim/constants/app_theme.dart';
 import 'package:mualim/controllers/subject_controller.dart';
+import 'package:mualim/home/dashboard.dart';
 import 'package:mualim/model/question_model.dart';
 
 // We use get package for our state management
@@ -128,9 +129,7 @@ class QuestionController extends GetxController
                   processLoading(context);
                   subjectController.updateChapterIndex(
                       subjectId!, context, _numOfCorrectAns, questions.length);
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
+                  Get.offAll(const Dashboard());
                 },
                 child: const Text('Proceed'),
               ),

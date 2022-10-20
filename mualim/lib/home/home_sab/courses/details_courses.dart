@@ -50,18 +50,86 @@ class _DetailedCourseState extends State<DetailedCourse> {
 
   @override
   Widget build(BuildContext context) {
-    return DraggableHome(
-      backgroundColor: AppTheme.placeholder,
-      alwaysShowLeadingAndAction: true,
-      headerExpandedHeight: 0.4,
-      appBarColor: AppTheme.appThemeColor,
-      title: Text(widget.title),
-      headerWidget: headerWidget(context),
-      body: [
-        listView(),
-      ],
-      curvedBodyRadius: 25,
-      fullyStretchable: false,
+    return StreamBuilder<SpecificSubjectModel?>(
+      stream: subjectController.specificSubjects(widget.subjectId, context),
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+          default:
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              final data = snapshot.data;
+              return DraggableHome(
+                backgroundColor: AppTheme.placeholder,
+                alwaysShowLeadingAndAction: true,
+                headerExpandedHeight: 0.4,
+                appBarColor: AppTheme.appThemeColor,
+                title: Text(widget.title),
+                headerWidget: headerWidget(context),
+                body: [
+                  ListView.builder(
+                    padding: const EdgeInsets.only(top: 0),
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: data!.subject.chapter.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) => Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15.0, vertical: 2.5),
+                      child: MaterialButton(
+                        onPressed: currentChapter! >= index + 1
+                            ? () {
+                                Get.to(LessonScreen(
+                                  chapterId: data.subject.chapter[index].id,
+                                  subjectId: widget.subjectId,
+                                ));
+                              }
+                            : () {},
+                        elevation: 1.0,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          isThreeLine: true,
+                          leading: CircleAvatar(
+                            backgroundColor: currentChapter! >= index + 1
+                                ? AppTheme.appThemeColor
+                                : Colors.grey,
+                            child: Text(
+                              "${index + 1}",
+                              style: const TextStyle(color: AppTheme.white),
+                            ),
+                          ),
+                          title: Text(
+                            data.subject.chapter[index].name.toUpperCase(),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          subtitle: Text(
+                            data.subject.chapter[index].description,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.play_arrow_rounded),
+                            onPressed: () {},
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+                curvedBodyRadius: 25,
+                fullyStretchable: false,
+              );
+            }
+        }
+      },
     );
   }
 

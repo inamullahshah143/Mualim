@@ -279,7 +279,9 @@ class _OTPScreenState extends State<OTPScreen> {
               .then((value) async {
             if (value.user != null) {
               if (widget.isForget) {
-                //
+                Get.offAll(PasswordConfirmation(
+                  phoneNo: widget.data['phone'],
+                ));
               } else {
                 await registrationController
                     .registrationProcess(widget.data, context)
@@ -303,6 +305,8 @@ class _OTPScreenState extends State<OTPScreen> {
                 );
               }
             }
+          }).whenComplete(() {
+            Navigator.of(context).pop();
           });
         },
         verificationFailed: (FirebaseAuthException e) {

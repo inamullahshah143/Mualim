@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mualim/constants/app_theme.dart';
 import 'package:mualim/controllers/user_profile_controller.dart';
 import 'package:mualim/helper/helper.dart';
+import 'package:mualim/home/drawer/change_password.dart';
 import 'package:mualim/main.dart';
 
 class ProfileEdit extends StatefulWidget {
@@ -280,7 +281,28 @@ class _ProfileEditState extends State<ProfileEdit> {
                         child: const Text("Save"),
                       ),
                     ),
-                  )
+                  ),
+                  Card(
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 5.0),
+                    clipBehavior: Clip.antiAlias,
+                    color: Colors.white,
+                    elevation: 1.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.all(15),
+                      onTap: () {
+                        Get.to(ChangePassword());
+                      },
+                      leading: const Icon(FontAwesome5.user_lock),
+                      title: const Text('Change Password'),
+                      subtitle:
+                          const Text('You can change your account password'),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                    ),
+                  ),
                 ],
               ),
             ),
