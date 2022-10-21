@@ -37,8 +37,8 @@ class _SavedCoursesState extends State<SavedCourses> {
         ? Column(
             children: [
               Image.asset(
-                'assets/images/alert.png',
-                height: MediaQuery.of(context).size.height * 0.5,
+                'assets/images/file.png',
+                height: MediaQuery.of(context).size.height * 0.35,
                 width: double.infinity,
               ),
               const Text(
