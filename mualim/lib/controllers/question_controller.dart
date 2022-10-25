@@ -1,5 +1,4 @@
-// ignore_for_file: deprecated_member_use
-
+// ignore_for_file: deprecated_member_use, import_of_legacy_library_into_null_safe
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mualim/constants/app_theme.dart';
@@ -143,4 +142,5 @@ class QuestionController extends GetxController
   void updateTheQnNum(int index) {
     _questionNumber.value = index + 1;
   }
+
 }

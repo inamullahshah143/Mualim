@@ -1,3 +1,5 @@
+
+import 'package:auto_direction/auto_direction.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mualim/constants/app_theme.dart';
@@ -27,8 +29,11 @@ class QuestionCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text(
-            question.question,
+          AutoDirection(
+            text:question.question,
+            child: Text(
+              question.question,
+            ),
           ),
           const SizedBox(height: kDefaultPadding / 2),
           ...List.generate(
