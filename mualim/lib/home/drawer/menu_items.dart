@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:mualim/auth/onboard_screen.dart';
 import 'package:mualim/constants/app_theme.dart';
 import 'package:mualim/controllers/login_controller.dart';
-import 'package:mualim/helper/genrate_certificate.dart';
 import 'package:mualim/home/drawer/about_us.dart';
 import 'package:mualim/home/drawer/edit_profile.dart';
 import 'package:mualim/home/drawer/privacy_policy.dart';
@@ -116,19 +115,7 @@ class MenuItems extends StatelessWidget {
                 ),
                 title: const Text('About Us'),
               ),
-              ListTile(
-                onTap: () {
-                  ZoomDrawer.of(context)!.close();
-
-                  CourseCompletionCertificatePdf(context).createPDF();
-                },
-                leading: const Icon(
-                  Icons.info_outline,
-                  color: AppTheme.fonts,
-                  size: 20,
-                ),
-                title: const Text('Get Certificate'),
-              ),
+            
               ListTile(
                 onTap: () {
                   processLoading(context);

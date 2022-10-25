@@ -465,6 +465,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
                             return 'please enter the cnic';
+                          } else if (value.length < 15) {
+                            return 'please enter a valid cnic';
                           } else {
                             return null;
                           }

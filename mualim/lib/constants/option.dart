@@ -34,11 +34,13 @@ class Option extends StatelessWidget {
           child: AutoDirection(
             text:text,
             child: ListTile(
+              dense: true,
+              contentPadding: EdgeInsets.zero,
               leading: Text(
                 "${index + 1}",
                 style: TextStyle(color: getTheRightColor(), fontSize: 16),
               ),
-              subtitle: Text(
+              title: Text(
                 text,
                 style: TextStyle(color: getTheRightColor(), fontSize: 16),
               ),
