@@ -113,7 +113,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide.none,
                           ),
-                          hintText: 'Name',
+                          hintText: 'Full Name',
                           hintStyle: TextStyle(
                             color: AppTheme.fonts.withOpacity(0.5),
                             fontSize: 14,
@@ -159,6 +159,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         horizontal: 20,
                       ),
                       child: DropdownButtonFormField(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
                             return 'please select the province';
@@ -200,8 +201,12 @@ class _SignupScreenState extends State<SignupScreen> {
                             child: Text('Balochistan'),
                           ),
                           DropdownMenuItem(
-                            value: 'gilgit baltista',
-                            child: Text('Gilgit Baltista'),
+                            value: 'gilgit baltistan',
+                            child: Text('Gilgit Baltistan'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'islamabad capital territory',
+                            child: Text('Islamabad Capital Territory'),
                           ),
                           DropdownMenuItem(
                             value: 'khyber pakhtunkhwa',
@@ -221,6 +226,8 @@ class _SignupScreenState extends State<SignupScreen> {
                             horizontal: 20,
                           ),
                           child: DropdownButtonFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             validator: (String? value) {
                               if (value == null || value.isEmpty) {
                                 return 'please select the district';
@@ -284,7 +291,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                 );
                                               }).toList()
                                             : province.value ==
-                                                    'gilgit baltista'
+                                                    'gilgit baltistan'
                                                 ? gilgitDest.map((list) {
                                                     return DropdownMenuItem(
                                                       value: list
@@ -295,16 +302,28 @@ class _SignupScreenState extends State<SignupScreen> {
                                                       ),
                                                     );
                                                   }).toList()
-                                                : kpkDest.map((list) {
-                                                    return DropdownMenuItem(
-                                                      value: list
-                                                          .toString()
-                                                          .toLowerCase(),
-                                                      child: Text(
-                                                        list.toString(),
-                                                      ),
-                                                    );
-                                                  }).toList(),
+                                                : province.value ==
+                                                        'islamabad capital territory'
+                                                    ? islDest.map((list) {
+                                                        return DropdownMenuItem(
+                                                          value: list
+                                                              .toString()
+                                                              .toLowerCase(),
+                                                          child: Text(
+                                                            list.toString(),
+                                                          ),
+                                                        );
+                                                      }).toList()
+                                                    : kpkDest.map((list) {
+                                                        return DropdownMenuItem(
+                                                          value: list
+                                                              .toString()
+                                                              .toLowerCase(),
+                                                          child: Text(
+                                                            list.toString(),
+                                                          ),
+                                                        );
+                                                      }).toList(),
                             onChanged: (String? value) {
                               district.value = value!;
                             },
@@ -318,6 +337,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         horizontal: 20,
                       ),
                       child: DropdownButtonFormField(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
                             return 'please select the designation';
@@ -370,6 +390,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         horizontal: 20,
                       ),
                       child: DropdownButtonFormField(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
                             return 'please select the qualification';
@@ -407,8 +428,8 @@ class _SignupScreenState extends State<SignupScreen> {
                             child: Text('Beachlor'),
                           ),
                           DropdownMenuItem(
-                            value: 'master',
-                            child: Text('Master'),
+                            value: 'master or above',
+                            child: Text('Master or above'),
                           ),
                         ],
                         onChanged: (String? value) {
@@ -493,6 +514,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         horizontal: 20,
                       ),
                       child: DropdownButtonFormField(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
                             return 'please select the gender';
@@ -543,8 +565,6 @@ class _SignupScreenState extends State<SignupScreen> {
                       child: TextFormField(
                         controller: email,
                         keyboardType: TextInputType.emailAddress,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (value) => Helper.validateEmail(value),
                         decoration: InputDecoration(
                           isDense: true,
                           filled: true,
@@ -577,8 +597,9 @@ class _SignupScreenState extends State<SignupScreen> {
                           showFlags: false,
                           selectorType: PhoneInputSelectorType.DIALOG,
                         ),
+                        maxLength: 10,
                         ignoreBlank: false,
-                        autoValidateMode: AutovalidateMode.disabled,
+                        autoValidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'please enter your phone number';
@@ -618,12 +639,12 @@ class _SignupScreenState extends State<SignupScreen> {
                             horizontal: 20,
                           ),
                           child: TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             controller: password,
                             validator: (value) =>
                                 Helper.validatePassword(value),
                             obscureText: isVisible.value,
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
                             decoration: InputDecoration(
                               isDense: true,
                               errorMaxLines: 6,
@@ -1011,4 +1032,5 @@ class _SignupScreenState extends State<SignupScreen> {
     'Skardu',
     'Shigar',
   ];
+  List islDest = ['Islamabad'];
 }
