@@ -192,8 +192,8 @@ class _PasswordConfirmationState extends State<PasswordConfirmation> {
                     updatePasswordController
                         .updatePassword(data, context)
                         .whenComplete(() {
-                      loginController.logoutProcess(context);
                       Get.offAll(const OnboardScreen());
+                      loginController.logoutProcess(context);
                     });
                   }
                 },

@@ -23,6 +23,7 @@ class LoginController extends GetxController {
         return null;
       }
     } on DioError catch (e) {
+      Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(e.response!.data['message'].toString()),
@@ -47,6 +48,7 @@ class LoginController extends GetxController {
         return 'error';
       }
     } on DioError catch (e) {
+      Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(e.response!.data['message'].toString()),
